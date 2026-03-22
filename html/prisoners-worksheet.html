@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>100 Prisoners — Student Worksheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f7f6f2;--card:#ffffff;--bd:#e5e2d8;--bd2:#d0ccbf;
+  --t0:#2a2820;--t1:#5a5648;--t2:#8a8578;
+  --cy:#0077cc;--gn:#00875a;--rd:#cc2244;--gl:#b06000;--pr:#6633cc;
+  --cy-l:#e8f4ff;--gn-l:#e6f7f0;--rd-l:#fff0f3;--gl-l:#fff7e6;--pr-l:#f3eeff;
+  --ink:#1a1814;
+  --r:8px;
+  --shadow:0 2px 12px rgba(0,0,0,.07),0 1px 3px rgba(0,0,0,.05)
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t0);font-family:'Inter',sans-serif;font-size:15px;line-height:1.7}
+
+/* ── LAYOUT ───────────────────────────────────────────── */
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 80px}
+
+/* ── HEADER ───────────────────────────────────────────── */
+#hd{background:var(--ink);color:#fff;padding:36px 32px 32px;margin-bottom:36px}
+.hd-inner{max-width:860px;margin:0 auto}
+.badge{display:inline-block;font-size:.62rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:3px 9px;border:1px solid rgba(255,255,255,.2);border-radius:3px;color:rgba(255,255,255,.55);margin-bottom:14px;font-family:'JetBrains Mono',monospace}
+h1{font-family:'Playfair Display',serif;font-size:2.1rem;font-weight:800;line-height:1.15;margin-bottom:8px}
+h1 em{color:#7dd3fc;font-style:normal}
+.sub{color:rgba(255,255,255,.45);font-size:.85rem;font-weight:400}
+
+/* ── SECTION ──────────────────────────────────────────── */
+.sec{margin-bottom:32px}
+.sec-hd{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.sec-num{width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;font-family:'JetBrains Mono',monospace;flex-shrink:0}
+.sec-title{font-size:1.1rem;font-weight:700;color:var(--ink)}
+
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:22px 24px;box-shadow:var(--shadow)}
+
+p{color:var(--t1);margin-bottom:12px;font-size:.92rem}
+p:last-child{margin-bottom:0}
+strong{color:var(--t0)}
+
+/* ── CALLOUTS ─────────────────────────────────────────── */
+.callout{border-radius:6px;padding:14px 16px;margin:14px 0;font-size:.88rem;border-left:3px solid}
+.callout.info{background:var(--cy-l);border-color:var(--cy);color:#003d66}
+.callout.warn{background:var(--gl-l);border-color:var(--gl);color:#5a3000}
+.callout.tip {background:var(--gn-l);border-color:var(--gn);color:#004a2f}
+.callout.key {background:var(--pr-l);border-color:var(--pr);color:#3d1a7a}
+.callout b{font-weight:700}
+
+/* ── MATH / PROB ──────────────────────────────────────── */
+.prob-compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.prob-box{border-radius:6px;padding:16px;text-align:center}
+.prob-box.bad{background:var(--rd-l);border:1px solid #ffc0cc}
+.prob-box.good{background:var(--gn-l);border:1px solid #b0e8d0}
+.prob-box .pb-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;opacity:.6}
+.prob-box .pb-val{font-size:1.5rem;font-weight:800;font-family:'JetBrains Mono',monospace;line-height:1}
+.prob-box.bad .pb-val{color:var(--rd)}
+.prob-box.good .pb-val{color:var(--gn)}
+.prob-box .pb-sub{font-size:.72rem;margin-top:6px;opacity:.65}
+
+/* ── MINI SIM ─────────────────────────────────────────── */
+#mini{background:#f9f8f5;border:1px solid var(--bd);border-radius:6px;padding:16px;margin:14px 0}
+.mini-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t2);margin-bottom:10px;font-family:'JetBrains Mono',monospace}
+#mini-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;margin-bottom:10px}
+.mb{aspect-ratio:1;border-radius:3px;border:1px solid var(--bd);background:#fff;display:flex;align-items:center;justify-content:center;font-size:.52rem;font-family:'JetBrains Mono',monospace;color:var(--t2);transition:all .12s}
+.mb.active{background:#dbeafe;border-color:#3b82f6;color:#1d4ed8;font-weight:700;transform:scale(1.12);box-shadow:0 0 8px rgba(59,130,246,.5)}
+.mb.visited{background:#f0f9ff;border-color:#93c5fd;color:#2563eb}
+.mb.found{background:#d1fae5;border-color:#34d399;color:#065f46;font-weight:700}
+.mb.fail{background:#fee2e2;border-color:#fca5a5;color:#991b1b}
+#mini-msg{font-size:.78rem;color:var(--t1);min-height:22px}
+.mini-btn{padding:4px 12px;border:1px solid var(--bd2);background:#fff;color:var(--t1);font-size:.72rem;font-weight:600;cursor:pointer;border-radius:4px;transition:all .1s;font-family:'Inter',sans-serif}
+.mini-btn:hover{border-color:var(--cy);color:var(--cy)}
+
+/* ── BIG SIMULATION ───────────────────────────────────── */
+#simdiv{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);background:#03030e;height:420px;position:relative}
+#simframe{width:100%;height:100%;border:none;display:block}
+.sim-overlay{position:absolute;inset:0;background:rgba(3,3,14,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .3s}
+.sim-overlay.hide{opacity:0;pointer-events:none}
+.sim-overlay p{color:rgba(255,255,255,.6);font-size:.82rem;text-align:center}
+.sim-load-btn{padding:10px 24px;background:#0077cc;color:#fff;border:none;border-radius:5px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+.sim-load-btn:hover{background:#005fa3}
+
+/* ── STEP GUIDE ───────────────────────────────────────── */
+.step{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+.step-hd{background:#f9f8f5;padding:13px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.step-hd:hover{background:#f3f2ee}
+.step-tag{font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:3px;font-family:'JetBrains Mono',monospace}
+.step-tag.given{background:#e0f2fe;color:#0369a1}
+.step-tag.todo {background:#fef3c7;color:#92400e}
+.step-name{font-size:.88rem;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--ink);flex:1}
+.step-caret{font-size:.7rem;color:var(--t2);transition:transform .2s}
+.step-body{padding:18px;display:none}
+.step-body.open{display:block}
+
+/* Code blocks */
+pre{background:#1a1814;border-radius:5px;padding:16px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:.76rem;line-height:1.75;margin:10px 0;border:1px solid #2d2b26}
+.c-kw{color:#c792ea}.c-type{color:#82aaff}.c-str{color:#c3e88d}
+.c-cmt{color:#546e7a;font-style:italic}.c-fn{color:#82aaff}
+.c-num{color:#f78c6c}.c-todo{color:#ffd700;background:rgba(255,215,0,.08);border-radius:2px;padding:0 2px}
+.c-ret{color:#c792ea}.c-ann{color:#546e7a}
+
+ul.hints{padding-left:18px;margin:8px 0}
+ul.hints li{font-size:.84rem;color:var(--t1);margin-bottom:5px}
+ul.hints li::marker{color:var(--cy)}
+
+/* ── CODE TESTER ──────────────────────────────────────── */
+#tester{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+.tester-hd{background:var(--ink);color:#fff;padding:14px 20px;display:flex;align-items:center;gap:10px}
+.tester-hd h3{font-size:.9rem;font-weight:700;flex:1}
+.tester-hd .badge2{font-size:.58rem;padding:2px 8px;border-radius:2px;background:rgba(0,229,255,.15);border:1px solid rgba(0,229,255,.3);color:#7dd3fc;font-family:'JetBrains Mono',monospace}
+.tester-body{padding:18px;background:#fff}
+label.lbl{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t2);margin-bottom:7px;font-family:'JetBrains Mono',monospace}
+#jcode{width:100%;height:200px;background:#1a1814;color:#a8d8ff;border:1px solid #2d2b26;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:.76rem;padding:12px;resize:vertical;outline:none;line-height:1.7}
+#jcode:focus{border-color:#3b82f6;box-shadow:0 0 0 2px rgba(59,130,246,.15)}
+#jst{min-height:20px;font-size:.78rem;font-family:'JetBrains Mono',monospace;margin:10px 0;color:var(--t2)}
+#jst .ok{color:var(--gn)}.#jst .ng{color:var(--rd)}
+.tester-btns{display:flex;gap:9px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.tbtn{padding:8px 18px;border:none;border-radius:5px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .12s}
+.tbtn.pri{background:var(--cy);color:#fff}
+.tbtn.pri:hover{background:#005fa3}
+.tbtn.sec{background:#f3f2ee;color:var(--t0);border:1px solid var(--bd2)}
+.tbtn.sec:hover{border-color:var(--t0)}
+.tbtn:disabled{opacity:.4;cursor:not-allowed}
+#sim2div{margin-top:16px;border:1px solid var(--bd);border-radius:6px;overflow:hidden;height:380px;display:none}
+#sim2div.show{display:block}
+#sim2frame{width:100%;height:100%;border:none;display:block}
+
+/* ── QUESTIONS ────────────────────────────────────────── */
+.q-item{border:1px solid var(--bd);border-radius:6px;padding:16px 18px;margin-bottom:12px;background:#fff}
+.q-num{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--cy);font-family:'JetBrains Mono',monospace;margin-bottom:6px}
+.q-text{font-size:.9rem;color:var(--t0);font-weight:500;margin-bottom:10px}
+.q-area{width:100%;min-height:64px;border:1px solid var(--bd);border-radius:5px;padding:9px 12px;font-family:'Inter',sans-serif;font-size:.83rem;color:var(--t0);resize:vertical;outline:none;background:#fafaf8;line-height:1.6}
+.q-area:focus{border-color:var(--cy);box-shadow:0 0 0 2px rgba(0,119,204,.1)}
+.q-area::placeholder{color:var(--t2)}
+
+/* ── PROGRESS BAR ─────────────────────────────────────── */
+#progress{position:fixed;top:0;left:0;right:0;height:3px;background:var(--bd);z-index:100}
+#pbar{height:100%;background:linear-gradient(90deg,#0077cc,#00875a);width:0%;transition:width .3s}
+
+/* ── SCROLL ANCHOR ────────────────────────────────────── */
+.anchor{scroll-margin-top:20px}
+
+@media(max-width:600px){
+  .prob-compare{grid-template-columns:1fr}
+  h1{font-size:1.5rem}
+  #simdiv{height:340px}
+  #sim2div{height:320px}
+}
+</style>
+</head>
+<body>
+
+<div id="progress"><div id="pbar"></div></div>
+
+<div id="hd">
+  <div class="hd-inner">
+    <div class="badge">Lab Assignment · Java</div>
+    <h1>The <em>100 Prisoners</em> Problem</h1>
+    <p class="sub">Simulation · Probability · Algorithm Design</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ═══════════════════════════════════════════════════
+     § 1  THE PROBLEM
+════════════════════════════════════════════════════ -->
+<div class="sec anchor" id="s1">
+  <div class="sec-hd">
+    <div class="sec-num">1</div>
+    <div class="sec-title">Understanding the Problem</div>
+  </div>
+  <div class="card">
+    <p><strong>The Setup.</strong> 100 prisoners are each assigned a unique number from 0 to 99. In a room there are 100 boxes, also numbered 0–99. Each box contains a slip of paper with one of the 100 numbers — placed randomly, one per box.</p>
+
+    <p>One by one, each prisoner enters the room alone and may open <strong>at most 50 boxes</strong>. If they find the slip with their own number — they succeed. They must then leave the room exactly as they found it. <strong>Prisoners cannot communicate after the game begins.</strong></p>
+
+    <div class="callout warn"><b>Win condition:</b> ALL 100 prisoners must find their number. If even one fails, everyone is executed.</div>
+
+    <div class="prob-compare">
+      <div class="prob-box bad">
+        <div class="pb-label">Random Strategy</div>
+        <div class="pb-val">(½)¹⁰⁰</div>
+        <div class="pb-sub">≈ 0.0000000000000000000000000000008%<br>Essentially impossible</div>
+      </div>
+      <div class="prob-box good">
+        <div class="pb-label">Chain Strategy</div>
+        <div class="pb-val">≈ 31.18%</div>
+        <div class="pb-sub">1 − ln(2) ≈ 0.3068...<br>Surprisingly achievable!</div>
+      </div>
+    </div>
+
+    <p><strong>The Chain Strategy.</strong> Each prisoner starts at the box with their own number, reads the value inside, and goes to <em>that</em> box next — following the chain until they find their own number or exhaust their 50 attempts.</p>
+
+    <div class="callout key"><b>Key insight:</b> The arrangement of slips defines a mathematical <em>permutation</em>. A permutation decomposes into disjoint <em>cycles</em>. The chain strategy succeeds if and only if <b>no cycle is longer than 50</b>.</div>
+
+    <p>Try stepping through the mini-demo below to see the chain in action:</p>
+
+    <!-- MINI DEMO -->
+    <div id="mini">
+      <div class="mini-title">INTERACTIVE DEMO — 10 BOXES, PRISONER #0 FOLLOWS THE CHAIN</div>
+      <div id="mini-grid"></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
+        <button class="mini-btn" onclick="miniStep()">▶ Step</button>
+        <button class="mini-btn" onclick="miniReset()">↺ Reset</button>
+        <div id="mini-msg">Click ▶ Step to begin</div>
+      </div>
+    </div>
+
+    <div class="callout tip"><b>Why does it work?</b> All prisoners follow chains rooted in the same permutation. Their fates are statistically correlated — they either all find short cycles, or they all suffer a long one. The probability that <em>no</em> cycle exceeds 50 is 1 − ln(2) ≈ 31.18%.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     § 2  FULL SIMULATION
+════════════════════════════════════════════════════ -->
+<div class="sec anchor" id="s2">
+  <div class="sec-hd">
+    <div class="sec-num">2</div>
+    <div class="sec-title">Visual Simulation — Watch the Strategy</div>
+  </div>
+  <div class="card">
+    <p>Before writing code, spend a few minutes watching the simulation. Notice how <strong>box colors reveal the cycle structure</strong> — cool colors (blue/cyan) for safe cycles ≤ 50, warm colors (red/orange) for dangerous ones. You can predict the round outcome before a single prisoner enters.</p>
+    <div id="simdiv">
+      <iframe id="simframe" title="100 Prisoners Simulation"></iframe>
+      <div class="sim-overlay" id="simOverlay">
+        <p>Click to load the interactive simulation</p>
+        <button class="sim-load-btn" onclick="loadSim()">Load Simulation</button>
+      </div>
+    </div>
+    <p style="margin-top:12px;font-size:.82rem;color:var(--t2)">Tip: use <strong>N = 10</strong> (top-left) to see the chains clearly, then switch to N = 100 and run ⚡ INSTANT for hundreds of rounds to watch the win rate converge to ~31.18%.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     § 3  CODE GUIDE
+════════════════════════════════════════════════════ -->
+<div class="sec anchor" id="s3">
+  <div class="sec-hd">
+    <div class="sec-num">3</div>
+    <div class="sec-title">Writing the Code — Step by Step</div>
+  </div>
+
+  <div class="callout info" style="margin-bottom:16px"><b>Language:</b> Java &nbsp;|&nbsp; <b>No external libraries</b> — use plain arrays and loops only. The function <code>generateUniqueRandomArray</code> is provided for you.</div>
+
+  <!-- STEP 0 — given -->
+  <div class="step">
+    <div class="step-hd" onclick="toggleStep(this)">
+      <span class="step-tag given">PROVIDED</span>
+      <span class="step-name">generateUniqueRandomArray(int n)</span>
+      <span class="step-caret">▼</span>
+    </div>
+    <div class="step-body open">
+      <p>This function is given to you. It returns an array of <code>n</code> unique integers from 0 to n−1, shuffled randomly using the <strong>Fisher-Yates algorithm</strong>. You don't need to modify it — just call it.</p>
+<pre><span class="c-cmt">/**
+ * Returns an array of n unique random integers in [0, n-1].
+ * Uses Fisher-Yates shuffle — O(n), uniform distribution.
+ */</span>
+<span class="c-ret">static</span> <span class="c-type">int</span>[] <span class="c-fn">generateUniqueRandomArray</span>(<span class="c-type">int</span> n) {
+    <span class="c-kw">if</span> (n &lt; 0)
+        <span class="c-kw">throw new</span> <span class="c-type">IllegalArgumentException</span>(<span class="c-str">"n must be non-negative"</span>);
+
+    <span class="c-type">int</span>[] arr = <span class="c-kw">new</span> <span class="c-type">int</span>[n];
+    <span class="c-kw">for</span> (<span class="c-type">int</span> i = <span class="c-num">0</span>; i &lt; n; i++) arr[i] = i;
+
+    <span class="c-type">Random</span> rand = <span class="c-kw">new</span> <span class="c-type">Random</span>();
+    <span class="c-kw">for</span> (<span class="c-type">int</span> i = n - <span class="c-num">1</span>; i &gt; <span class="c-num">0</span>; i--) {
+        <span class="c-type">int</span> j = rand.nextInt(i + <span class="c-num">1</span>);
+        <span class="c-type">int</span> tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+    <span class="c-kw">return</span> arr;
+}</pre>
+    </div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="step">
+    <div class="step-hd" onclick="toggleStep(this)">
+      <span class="step-tag todo">TASK 1</span>
+      <span class="step-name">serialSearchByValueChain(int[] arr, int startIndex)</span>
+      <span class="step-caret">▶</span>
+    </div>
+    <div class="step-body">
+      <p>This is the <strong>core of the strategy</strong>. The prisoner starts at box <code>startIndex</code>, reads the value, jumps to that box, and keeps following the chain. Count every box opened.</p>
+      <p>Return the number of boxes opened when the prisoner finds their number. Return <code>-1</code> if a cycle is detected (guard against infinite loops using a <code>boolean[]</code>).</p>
+
+      <div class="callout tip"><b>Hint:</b> The loop runs at most <code>arr.length</code> times. Use <code>currentIndex</code> to track position and <code>searchCount</code> to count. The "found" condition is <code>arr[currentIndex] == startIndex</code>.</div>
+
+<pre><span class="c-cmt">/**
+ * Follows the value-chain starting from startIndex.
+ * Returns the number of boxes opened to find startIndex,
+ * or -1 if a cycle is detected (should not happen with a valid permutation).
+ */</span>
+<span class="c-ret">static</span> <span class="c-type">int</span> <span class="c-fn">serialSearchByValueChain</span>(<span class="c-type">int</span>[] arr, <span class="c-type">int</span> startIndex) {
+
+    <span class="c-cmt">// Validate input</span>
+    <span class="c-kw">if</span> (startIndex &lt; <span class="c-num">0</span> || startIndex &gt;= arr.length)
+        <span class="c-kw">throw new</span> <span class="c-type">IllegalArgumentException</span>(<span class="c-str">"startIndex out of bounds"</span>);
+
+    <span class="c-todo">// TODO: declare a boolean[] to track visited boxes (size = arr.length)</span>
+
+    <span class="c-type">int</span> currentIndex = startIndex;
+    <span class="c-type">int</span> searchCount  = <span class="c-num">0</span>;
+
+    <span class="c-kw">while</span> (<span class="c-kw">true</span>) {
+        <span class="c-todo">// TODO: increment searchCount</span>
+
+        <span class="c-todo">// TODO: check if currentIndex was already visited → return -1</span>
+
+        <span class="c-todo">// TODO: mark currentIndex as visited</span>
+
+        <span class="c-todo">// TODO: if arr[currentIndex] == startIndex → return searchCount (found!)</span>
+
+        <span class="c-todo">// TODO: otherwise move: currentIndex = arr[currentIndex]</span>
+    }
+}</pre>
+
+      <ul class="hints">
+        <li>A <code>boolean[]</code> of size <code>arr.length</code> replaces a <code>HashSet</code> — same O(1) lookup, no imports needed.</li>
+        <li>In a valid permutation the chain <em>always</em> loops back — the only termination conditions are "found" and "already visited".</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step">
+    <div class="step-hd" onclick="toggleStep(this)">
+      <span class="step-tag todo">TASK 2</span>
+      <span class="step-name">testSerialSearchByValueChain(int n)</span>
+      <span class="step-caret">▶</span>
+    </div>
+    <div class="step-body">
+      <p>This function simulates <strong>one full round</strong>: generate one random permutation, then let all <code>n</code> prisoners try the chain strategy. Return <code>true</code> if <em>all</em> of them found their number within <code>n/2</code> steps.</p>
+
+      <div class="callout tip"><b>Hint:</b> Call <code>generateUniqueRandomArray(n)</code> once. Then loop over all <code>startIndex</code> values from 0 to n−1. If any prisoner's count exceeds <code>n/2</code>, return <code>false</code> immediately.</div>
+
+<pre><span class="c-cmt">/**
+ * Runs one full round of the game with n prisoners.
+ * Returns true if all prisoners succeed (chain ≤ n/2), false otherwise.
+ */</span>
+<span class="c-ret">static</span> <span class="c-type">boolean</span> <span class="c-fn">testSerialSearchByValueChain</span>(<span class="c-type">int</span> n) {
+
+    <span class="c-todo">// TODO: generate a random array of size n</span>
+
+    <span class="c-todo">// TODO: loop over all prisoners (startIndex = 0 .. n-1)</span>
+    <span class="c-kw">for</span> ( <span class="c-todo">/* TODO */</span> ) {
+
+        <span class="c-todo">// TODO: call serialSearchByValueChain for each prisoner</span>
+
+        <span class="c-todo">// TODO: if the result exceeds n/2 → return false immediately</span>
+    }
+
+    <span class="c-kw">return</span> <span class="c-num">true</span>; <span class="c-cmt">// all succeeded</span>
+}</pre>
+
+      <ul class="hints">
+        <li>Use <code>n / 2.0</code> (or cast to double) to avoid integer-division issues when n is odd.</li>
+        <li>Early termination (<code>return false</code> inside the loop) is both correct and efficient — no need to test the remaining prisoners once one has failed.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step">
+    <div class="step-hd" onclick="toggleStep(this)">
+      <span class="step-tag todo">TASK 3</span>
+      <span class="step-name">main(String[] args)</span>
+      <span class="step-caret">▶</span>
+    </div>
+    <div class="step-body">
+      <p>Run <code>tests</code> independent rounds and count how many times all prisoners were freed. Print the empirical win rate. It should converge to approximately <strong>31.18%</strong>.</p>
+
+<pre><span class="c-ret">public static void</span> <span class="c-fn">main</span>(<span class="c-type">String</span>[] args) {
+
+    <span class="c-type">int</span> free      = <span class="c-num">0</span>;
+    <span class="c-type">int</span> prisoners = <span class="c-num">100</span>;
+    <span class="c-type">int</span> tests     = <span class="c-num">10000</span>;
+
+    <span class="c-todo">// TODO: loop 'tests' times</span>
+    <span class="c-kw">for</span> ( <span class="c-todo">/* TODO */</span> ) {
+
+        <span class="c-todo">// TODO: call testSerialSearchByValueChain(prisoners)</span>
+        <span class="c-todo">// TODO: if it returns true, increment free</span>
+    }
+
+    <span class="c-todo">// TODO: print free / tests as a decimal (cast to double)</span>
+    <span class="c-type">System</span>.out.println( <span class="c-todo">/* TODO */</span> );
+}</pre>
+
+      <ul class="hints">
+        <li>Expected output: a number close to <code>0.3118</code> — it will vary slightly each run due to randomness.</li>
+        <li>With 10,000 tests and 100 prisoners the result is statistically stable (standard deviation ≈ 0.005).</li>
+      </ul>
+    </div>
+  </div>
+
+</div><!-- /sec 3 -->
+
+<!-- ═══════════════════════════════════════════════════
+     § 4  CODE TESTER
+════════════════════════════════════════════════════ -->
+<div class="sec anchor" id="s4">
+  <div class="sec-hd">
+    <div class="sec-num">4</div>
+    <div class="sec-title">Test Your Code Visually</div>
+  </div>
+  <div id="tester">
+    <div class="tester-hd">
+      <h3>Java → Visual Tester</h3>
+      <span class="badge2">AI-POWERED</span>
+    </div>
+    <div class="tester-body">
+      <p style="font-size:.85rem;color:var(--t1);margin-bottom:14px">Paste your <code>serialSearchByValueChain</code> function (or your entire class). An AI will translate it to JavaScript and run the simulation with your algorithm — so you can see visually whether your implementation is correct.</p>
+      <label class="lbl">Your Java Code</label>
+      <textarea id="jcode" placeholder="static int serialSearchByValueChain(int[] arr, int startIndex) {
+    // your implementation here...
+}
+
+// You can paste the entire class — only serialSearchByValueChain will be used."></textarea>
+      <div id="jst"></div>
+      <div class="tester-btns">
+        <button class="tbtn pri" id="japply" onclick="applyJava()">⚡ Translate &amp; Run</button>
+        <button class="tbtn sec" onclick="resetDef()">↺ Reset to Default</button>
+        <span id="jmode" style="font-size:.75rem;font-family:'JetBrains Mono',monospace;color:var(--t2)">Using: default algorithm</span>
+      </div>
+      <div id="sim2div">
+        <iframe id="sim2frame" title="Custom simulation"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     § 5  QUESTIONS
+════════════════════════════════════════════════════ -->
+<div class="sec anchor" id="s5">
+  <div class="sec-hd">
+    <div class="sec-num">5</div>
+    <div class="sec-title">Reflection Questions</div>
+  </div>
+
+  <div class="q-item">
+    <div class="q-num">Question 1</div>
+    <div class="q-text">Why is the chain strategy so much better than picking boxes at random? Explain in terms of <em>correlation</em> between prisoners' outcomes.</div>
+    <textarea class="q-area" placeholder="Your answer..."></textarea>
+  </div>
+
+  <div class="q-item">
+    <div class="q-num">Question 2</div>
+    <div class="q-text">What is the relationship between <em>cycles in the permutation</em> and the success of the round? Under what exact condition does the entire group succeed?</div>
+    <textarea class="q-area" placeholder="Your answer..."></textarea>
+  </div>
+
+  <div class="q-item">
+    <div class="q-num">Question 3</div>
+    <div class="q-text">In your simulation, why does the result converge to ~0.3118 as the number of trials increases? What mathematical principle explains this convergence?</div>
+    <textarea class="q-area" placeholder="Your answer..."></textarea>
+  </div>
+
+  <div class="q-item">
+    <div class="q-num">Bonus</div>
+    <div class="q-text">What would happen if each prisoner started at a <em>random</em> box instead of their own number — but still followed the chain? Would the success rate change? Why or why not?</div>
+    <textarea class="q-area" placeholder="Your answer..."></textarea>
+  </div>
+
+</div>
+
+</div><!-- /wrap -->
+
+<!-- ══════════════════════════════════════════════════════
+     INLINE SIMULATION SRC (avoids iframe src issues)
+══════════════════════════════════════════════════════ -->
+<script id="simSrc" type="text/plain">
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#03030e;--s1:#07071a;--s2:#0a0a1e;--bd:#14143a;--t0:#8888bb;--t1:#c0c0e0;--wh:#eeeeff;--cy:#00e5ff;--gn:#00ff88;--rd:#ff2255;--gl:#ffc800;--pr:#aa44ff}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--t0);font-family:'Syne',sans-serif;display:flex;flex-direction:column}
+#hd{background:var(--s1);border-bottom:1px solid var(--bd);padding:5px 12px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+#logo{font-size:.95rem;font-weight:900;color:var(--wh);letter-spacing:.04em;white-space:nowrap}
+#logo em{color:var(--cy);font-style:normal}
+.ndiv{display:flex;align-items:center;gap:4px}
+.nb{padding:2px 8px;border:1px solid var(--bd);background:transparent;color:var(--t0);font-family:'JetBrains Mono',monospace;font-size:.58rem;cursor:pointer;border-radius:3px;transition:all .1s}
+.nb:hover,.nb.on{border-color:var(--cy);color:var(--cy);background:rgba(0,229,255,.08)}
+.nl{font-size:.48rem;font-family:'JetBrains Mono',monospace;color:var(--bd)}
+.hstats{display:flex;gap:12px;margin-left:auto}
+.hst .hl{font-size:.4rem;text-transform:uppercase;letter-spacing:.1em;color:var(--bd);font-family:'JetBrains Mono',monospace}
+.hst .hv{font-size:.88rem;font-weight:700;font-family:'JetBrains Mono',monospace;line-height:1.1}
+#mn{flex:1;display:grid;grid-template-columns:1fr 260px;gap:1px;background:var(--bd);min-height:0;overflow:hidden}
+#lp{background:var(--bg);display:flex;flex-direction:column;padding:8px 10px;gap:6px;overflow:hidden;min-height:0}
+.ptl{font-size:.4rem;text-transform:uppercase;letter-spacing:.12em;color:var(--bd);font-family:'JetBrains Mono',monospace;flex-shrink:0}
+#bgrid{display:grid;gap:2px;flex:1;align-content:start;min-height:0}
+.bx{border-radius:3px;background:var(--s1);border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;aspect-ratio:1;transition:border-color .07s,background .07s,transform .06s,box-shadow .06s;position:relative}
+.bnum{font-size:.28rem;font-family:'JetBrains Mono',monospace;color:var(--bd);line-height:1}
+.bval{font-size:.6rem;font-weight:600;font-family:'JetBrains Mono',monospace;line-height:1.1;transition:color .07s}
+#pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(14px,1fr));gap:2px;flex-shrink:0}
+.pc{aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.02);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:.26rem;font-family:'JetBrains Mono',monospace;color:var(--bd);transition:all .1s}
+.pc.act{background:rgba(0,229,255,.14);border-color:var(--cy);color:var(--cy);box-shadow:0 0 4px rgba(0,229,255,.4)}
+.pc.suc{background:rgba(0,255,136,.1);border-color:rgba(0,255,136,.5);color:var(--gn)}
+.pc.fai{background:rgba(255,34,85,.1);border-color:rgba(255,34,85,.5);color:var(--rd)}
+#rp{background:var(--bd);display:flex;flex-direction:column;gap:1px;overflow:hidden}
+.rpnl{background:var(--s1);padding:8px 10px}
+.rpnl.grow{flex:1;min-height:0;display:flex;flex-direction:column}
+#info{font-size:.54rem;font-family:'JetBrains Mono',monospace;line-height:1.9;color:var(--t0);min-height:70px}
+#info .cy{color:var(--cy)}#info .gn{color:var(--gn)}#info .rd{color:var(--rd)}#info .gl{color:var(--gl)}#info .dm{color:var(--bd)}
+canvas{flex:1;display:block;width:100%;min-height:0}
+#ct{background:var(--s1);border-top:1px solid var(--bd);padding:5px 12px;display:flex;align-items:center;gap:7px;flex-shrink:0;flex-wrap:wrap}
+.spw{display:flex;align-items:center;gap:5px;flex:1;min-width:90px}
+.spl{font-size:.42rem;font-family:'JetBrains Mono',monospace;color:var(--bd)}
+input[type=range]{flex:1;-webkit-appearance:none;height:2px;background:var(--bd);outline:none;border-radius:1px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:9px;height:9px;border-radius:50%;background:var(--cy);cursor:pointer;box-shadow:0 0 6px rgba(0,229,255,.6)}
+.cb{padding:4px 10px;border:1px solid var(--bd);background:transparent;color:var(--t1);font-family:'Syne',sans-serif;font-size:.62rem;font-weight:700;cursor:pointer;border-radius:3px;transition:all .1s;white-space:nowrap}
+.cb:hover,.cb.on{border-color:var(--cy);color:var(--cy);background:rgba(0,229,255,.07)}
+.cb.dng:hover{border-color:var(--rd);color:var(--rd);background:rgba(255,34,85,.06)}
+</style></head><body>
+<div id="hd">
+  <div id="logo">100&nbsp;<em>PRISONERS</em></div>
+  <div class="ndiv"><span class="nl">N=</span>
+    <button class="nb" data-n="10" onclick="setN(10)">10</button>
+    <button class="nb" data-n="20" onclick="setN(20)">20</button>
+    <button class="nb" data-n="50" onclick="setN(50)">50</button>
+    <button class="nb on" data-n="100" onclick="setN(100)">100</button>
+  </div>
+  <div class="hstats">
+    <div class="hst"><div class="hl">Round</div><div class="hv" id="hrd" style="color:var(--cy)">0</div></div>
+    <div class="hst"><div class="hl">Wins</div><div class="hv" id="hwn" style="color:var(--gn)">0</div></div>
+    <div class="hst"><div class="hl">Rate</div><div class="hv" id="hrt">—</div></div>
+    <div class="hst"><div class="hl">Theory</div><div class="hv" style="color:var(--bd)">31.18%</div></div>
+  </div>
+</div>
+<div id="mn">
+  <div id="lp">
+    <div class="ptl" id="btl">BOXES</div>
+    <div id="bgrid"></div>
+    <div class="ptl">PRISONERS</div>
+    <div id="pgrid"></div>
+  </div>
+  <div id="rp">
+    <div class="rpnl" style="flex-shrink:0"><div class="ptl">STATE</div><div id="info"><span class="dm">Press ▶ PLAY</span></div></div>
+    <div class="rpnl grow"><div class="ptl">SUCCESS RATE vs THEORY (31.18%)</div><canvas id="cv"></canvas></div>
+  </div>
+</div>
+<div id="ct">
+  <div class="spw"><span class="spl">SLOW</span><input type="range" id="spd" min="1" max="100" value="30"><span class="spl">FAST</span></div>
+  <button class="cb on" id="bplay" onclick="togglePlay()">▶ PLAY</button>
+  <button class="cb" onclick="doStep()">STEP</button>
+  <button class="cb" onclick="doInstant()">⚡ INSTANT</button>
+  <button class="cb" onclick="doNewRound()">↺ NEW</button>
+  <button class="cb dng" onclick="doReset()">✕ RESET</button>
+</div>
+<script>
+var N=100,HALF=50,perm=[],cycInfo=[],longestCyc=0,round=0,wins=0,hist=[],playing=false,roundDone=true,betweenRounds=false,pIdx=0,chains=[],cStep=0,prevBox=-1,customFn=null,useCustom=false,animTimer=null;
+var SH=[180,155,200,130,220,165,240,145],DH=[0,20,345,10];
+function shuf(n){var a=[...Array(n).keys()];for(var i=n-1;i>0;i--){var j=0|Math.random()*(i+1);var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function buildCyc(p){var info=new Array(p.length),vis=new Set(),si=0,di=0,mx=0;for(var s=0;s<p.length;s++){if(vis.has(s))continue;var cyc=[],c=s;while(!vis.has(c)){vis.add(c);cyc.push(c);c=p[c];}var safe=cyc.length<=HALF,hue=safe?SH[si++%8]:DH[di++%4];cyc.forEach(function(b){info[b]={len:cyc.length,safe:safe,hue:hue};});if(cyc.length>mx)mx=cyc.length;}return{info:info,mx:mx};}
+function defSrch(arr,si){var half=Math.floor(arr.length/2),vis=[],cur=si;for(var s=0;s<half;s++){vis.push(cur);if(arr[cur]===si)return{visited:vis,success:true};cur=arr[cur];}return{visited:vis,success:false};}
+function runSrch(arr,si){if(useCustom&&customFn){try{return customFn(arr,si);}catch(e){return defSrch(arr,si);}}return defSrch(arr,si);}
+function buildBG(){var g=document.getElementById('bgrid');g.innerHTML='';var cols=Math.min(10,N);g.style.gridTemplateColumns='repeat('+cols+',1fr)';document.getElementById('btl').textContent='BOXES ('+N+') — cool=safe ≤'+HALF+' · warm=danger >'+HALF;for(var i=0;i<N;i++){var b=document.createElement('div');b.className='bx';b.id='bx'+i;b.innerHTML='<div class="bnum">'+i+'</div><div class="bval" id="bv'+i+'">?</div>';g.appendChild(b);}}
+function buildPG(){var g=document.getElementById('pgrid');g.innerHTML='';for(var i=0;i<N;i++){var p=document.createElement('div');p.className='pc';p.id='pc'+i;if(N<=20)p.textContent=i;g.appendChild(p);}}
+function rxC(i){var el=document.getElementById('bx'+i),v=document.getElementById('bv'+i),c=cycInfo[i],a=(0.03+(c.len/N)*0.08).toFixed(3);el.style.background='hsla('+c.hue+',68%,55%,'+a+')';el.style.borderColor='hsla('+c.hue+',68%,55%,'+(c.safe?0.18:0.42)+')';el.style.boxShadow='';el.style.transform='';v.style.color='hsla('+c.hue+',60%,55%,0.35)';v.textContent='?';}
+function rxV(i){var el=document.getElementById('bx'+i),v=document.getElementById('bv'+i);el.style.background='rgba(0,229,255,.07)';el.style.borderColor='rgba(0,229,255,.32)';el.style.boxShadow='';el.style.transform='';v.style.color='var(--cy)';v.textContent=perm[i];}
+function rxA(i){var el=document.getElementById('bx'+i),v=document.getElementById('bv'+i);el.style.background='rgba(0,229,255,.19)';el.style.borderColor='var(--cy)';el.style.transform='scale(1.1)';el.style.boxShadow='0 0 16px rgba(0,229,255,.7)';v.style.color='#fff';v.textContent=perm[i];}
+function rxR(i,ok){var el=document.getElementById('bx'+i),v=document.getElementById('bv'+i);el.style.transform='';el.style.boxShadow='';el.style.background=ok?'rgba(0,255,136,.07)':'rgba(255,34,85,.07)';el.style.borderColor=ok?'rgba(0,255,136,.38)':'rgba(255,34,85,.38)';v.style.color=ok?'var(--gn)':'var(--rd)';v.textContent=perm[i];}
+function sp(i,s){var e=document.getElementById('pc'+i);if(e)e.className='pc'+(s?' '+s:'');}
+function si2(h){document.getElementById('info').innerHTML=h;}
+function initRnd(){perm=shuf(N);var r=buildCyc(perm);cycInfo=r.info;longestCyc=r.mx;pIdx=0;cStep=0;prevBox=-1;roundDone=false;betweenRounds=false;chains=[];for(var i=0;i<N;i++)chains.push(runSrch(perm,i));for(var i=0;i<N;i++){rxC(i);sp(i,'');}sp(0,'act');var safe=longestCyc<=HALF;si2('<span class="cy">Round '+(round+1)+'</span><br>Longest cycle: <span class="'+(safe?'gn':'rd')+'">'+longestCyc+' '+(safe?'≤':'>')+' '+HALF+'</span><br><span class="'+(safe?'gn':'rd')+'">'+(safe?'✓ Can succeed':'✗ Will fail')+'</span>');}
+function adv(){if(pIdx>=N){endRnd();return;}var ch=chains[pIdx];if(cStep===ch.visited.length){if(prevBox!==-1)prevBox=-1;ch.visited.forEach(function(b){rxR(b,ch.success);});sp(pIdx,ch.success?'suc':'fai');pIdx++;cStep=0;if(pIdx>=N){endRnd();return;}sp(pIdx,'act');return;}if(prevBox!==-1)rxV(prevBox);var box=ch.visited[cStep];rxA(box);prevBox=box;var val=perm[box],found=(val===pIdx);var trail=ch.visited.slice(Math.max(0,cStep-3),cStep+1).join('→');si2('<span class="cy">P'+pIdx+'</span> step '+(cStep+1)+'/'+HALF+'<br>Box <span class="cy">'+box+'</span>→<span class="'+(found?'gn':'cy')+'">'+val+'</span>'+(found?' <span class="gn">FOUND ✓</span>':'')+' <br>'+trail+'<br>Cycle: <span class="'+(cycInfo[box].safe?'gn':'rd')+'">'+cycInfo[box].len+'</span> · Max: <span class="'+(longestCyc<=HALF?'gn':'rd')+'">'+longestCyc+'</span>');cStep++;}
+function endRnd(){roundDone=true;prevBox=-1;round++;var won=chains.every(function(c){return c.success;});if(won)wins++;hist.push(won?1:0);if(hist.length>3000)hist.shift();document.getElementById('hrd').textContent=round;document.getElementById('hwn').textContent=wins;var rate=(wins/round*100).toFixed(1)+'%';var re=document.getElementById('hrt');re.textContent=rate;re.style.color=wins/round>=0.27?'var(--gn)':'var(--gl)';si2('<span class="'+(won?'gn':'rd')+'">'+(won?'✓ ALL FREED!':'✗ FAILED')+'</span><br>Longest: <span class="'+(longestCyc<=HALF?'gn':'rd')+'">'+longestCyc+'</span><br>Rate: <span class="'+(wins/round>=0.27?'gn':'gl')+'">'+rate+'</span> / 31.18%<br><span class="dm">'+(playing?'next round...':'Press ▶')+'</span>');drawChart();}
+function getDelay(){var v=+document.getElementById('spd').value;return Math.round(420*Math.pow(0.017,(v-1)/99));}
+function sched(d){clearTimeout(animTimer);if(!playing)return;animTimer=setTimeout(tick,d!==undefined?d:getDelay());}
+function tick(){if(!playing)return;if(betweenRounds){betweenRounds=false;initRnd();sched();return;}if(roundDone){betweenRounds=true;sched(700);return;}adv();sched();}
+function setPlayBtn(on){var b=document.getElementById('bplay');if(on){b.textContent='⏸ PAUSE';b.classList.add('on');}else{b.textContent='▶ PLAY';b.classList.remove('on');}}
+function togglePlay(){playing=!playing;clearTimeout(animTimer);setPlayBtn(playing);if(playing){if(roundDone&&!betweenRounds)initRnd();sched();}}
+function doStep(){if(playing){playing=false;clearTimeout(animTimer);setPlayBtn(false);}if(roundDone&&!betweenRounds)initRnd();if(!roundDone)adv();}
+function doInstant(){clearTimeout(animTimer);var wp=playing;playing=false;if(roundDone)initRnd();if(prevBox!==-1){rxV(prevBox);prevBox=-1;}for(var i=0;i<N;i++){chains[i].visited.forEach(function(b){rxR(b,chains[i].success);});sp(i,chains[i].success?'suc':'fai');}pIdx=N;endRnd();if(wp){playing=true;setPlayBtn(true);betweenRounds=true;sched(600);}}
+function doNewRound(){clearTimeout(animTimer);betweenRounds=false;initRnd();if(playing)sched();}
+function doReset(){clearTimeout(animTimer);playing=false;roundDone=true;betweenRounds=false;round=0;wins=0;hist=[];setPlayBtn(false);document.getElementById('hrd').textContent='0';document.getElementById('hwn').textContent='0';document.getElementById('hrt').textContent='—';document.getElementById('hrt').style.color='';initRnd();drawChart();}
+function setN(n){clearTimeout(animTimer);playing=false;roundDone=true;betweenRounds=false;round=0;wins=0;hist=[];N=n;HALF=n/2;setPlayBtn(false);document.getElementById('hrd').textContent='0';document.getElementById('hwn').textContent='0';document.getElementById('hrt').textContent='—';document.getElementById('hrt').style.color='';document.querySelectorAll('.nb').forEach(function(b){b.classList.toggle('on',+b.dataset.n===n);});buildBG();buildPG();initRnd();drawChart();}
+function drawChart(){var cv=document.getElementById('cv'),W=cv.offsetWidth,H=cv.offsetHeight;if(!W||!H)return;cv.width=W;cv.height=H;var ctx=cv.getContext('2d');ctx.fillStyle='#040410';ctx.fillRect(0,0,W,H);[[0.1,false],[0.2,false],[0.3118,true],[0.4,false],[0.5,false]].forEach(function(pair){var v=pair[0],isT=pair[1],y=H-v*H;ctx.strokeStyle=isT?'rgba(255,200,0,.22)':'rgba(255,255,255,.04)';ctx.lineWidth=isT?1.5:1;ctx.setLineDash(isT?[4,5]:[]);ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle=isT?'rgba(255,200,0,.8)':'rgba(255,255,255,.18)';ctx.font='8px JetBrains Mono,monospace';ctx.textAlign='right';ctx.fillText(isT?'31.18%':Math.round(v*100)+'%',W-3,y-2);});if(hist.length<2){ctx.fillStyle='rgba(255,255,255,.1)';ctx.font='9px JetBrains Mono,monospace';ctx.textAlign='center';ctx.fillText('play to generate data',W/2,H/2);return;}var bw=Math.max(1,W/hist.length);hist.forEach(function(w,i){var x=i*bw,bh=w?H*.04:H*.02;ctx.fillStyle=w?'rgba(0,255,136,.14)':'rgba(255,34,85,.1)';ctx.fillRect(x,H-bh,bw,bh);});var pts=hist.map(function(_,i){var wn=Math.min(50,i+1),sl=hist.slice(i-wn+1,i+1),avg=sl.reduce(function(a,b){return a+b;},0)/sl.length;return{x:(i/(hist.length-1||1))*W,y:H-avg*H};});var g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'rgba(0,255,136,.2)');g.addColorStop(1,'rgba(0,255,136,.01)');ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(pts[0].x,H);pts.forEach(function(p){ctx.lineTo(p.x,p.y);});ctx.lineTo(pts[pts.length-1].x,H);ctx.closePath();ctx.fill();ctx.strokeStyle='rgba(0,255,136,.88)';ctx.lineWidth=1.8;ctx.setLineDash([]);ctx.beginPath();pts.forEach(function(p,i){i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y);});ctx.stroke();var l=pts[pts.length-1];ctx.fillStyle='#00ff88';ctx.beginPath();ctx.arc(l.x,l.y,3.5,0,Math.PI*2);ctx.fill();if(round>0){ctx.fillStyle='rgba(0,255,136,.9)';ctx.font='bold 8px JetBrains Mono,monospace';ctx.textAlign='right';ctx.fillText((wins/round*100).toFixed(1)+'%',W-4,l.y-6);}}
+window.setCustomFn=function(fn){customFn=fn;useCustom=!!fn;};
+buildBG();buildPG();initRnd();drawChart();
+window.addEventListener('resize',drawChart);
+<\/script></body></html>
+</script>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  MINI DEMO
+// ═══════════════════════════════════════════════════════
+(function(){
+  const n=10;
+  let arr, step, prisoner=0, visitedBoxes, done;
+
+  function randPerm(n){
+    const a=[...Array(n).keys()];
+    for(let i=n-1;i>0;i--){const j=0|Math.random()*(i+1);[a[i],a[j]]=[a[j],a[i]];}
+    return a;
+  }
+
+  function build(){
+    const g=document.getElementById('mini-grid'); g.innerHTML='';
+    for(let i=0;i<n;i++){
+      const b=document.createElement('div'); b.className='mb'; b.id='mb'+i;
+      b.textContent=i; g.appendChild(b);
+    }
+  }
+
+  window.miniReset=function(){
+    arr=randPerm(n); step=0; visitedBoxes=[]; done=false; prisoner=0;
+    for(let i=0;i<n;i++){
+      const el=document.getElementById('mb'+i);
+      el.className='mb'; el.textContent=i;
+    }
+    document.getElementById('mini-msg').textContent='Click ▶ Step — Prisoner #'+prisoner+' follows the chain';
+  };
+
+  window.miniStep=function(){
+    if(done){miniReset();return;}
+    if(step===0){
+      // start
+      visitedBoxes=[prisoner];
+      showMini(prisoner,'active');
+      document.getElementById('mini-msg').textContent='P'+prisoner+' opens box '+prisoner+' → finds '+arr[prisoner];
+    } else {
+      const prev=visitedBoxes[visitedBoxes.length-1];
+      const val=arr[prev];
+      if(val===prisoner){
+        showMini(prev,'found');
+        visitedBoxes.forEach(b=>{ if(b!==prev) showMini(b,'visited'); });
+        document.getElementById('mini-msg').textContent='✓ Found! P'+prisoner+' found their number in '+(step)+' steps.';
+        prisoner=(prisoner+1)%n;
+        done=step>=n/2||prisoner===0;
+        step=0; visitedBoxes=[];
+        return;
+      } else if(step>=n/2){
+        showMini(prev,'fail');
+        document.getElementById('mini-msg').textContent='✗ P'+prisoner+' failed after '+step+' steps!';
+        done=true; return;
+      }
+      visitedBoxes.push(val);
+      showMini(prev,'visited');
+      showMini(val,'active');
+      document.getElementById('mini-msg').textContent='P'+prisoner+' opens box '+val+' → finds '+arr[val];
+    }
+    step++;
+  };
+
+  function showMini(i,st){
+    const el=document.getElementById('mb'+i); if(!el)return;
+    el.className='mb'+(st?' '+st:'');
+    if(st==='active'||st==='visited'||st==='found'||st==='fail')
+      el.textContent=arr[i];
+    else
+      el.textContent=i;
+  }
+
+  build(); miniReset();
+})();
+
+// ═══════════════════════════════════════════════════════
+//  STEP ACCORDION
+// ═══════════════════════════════════════════════════════
+function toggleStep(hd){
+  const body=hd.nextElementSibling;
+  const caret=hd.querySelector('.step-caret');
+  const open=body.classList.toggle('open');
+  caret.textContent=open?'▼':'▶';
+}
+
+// ═══════════════════════════════════════════════════════
+//  SIMULATION IFRAME
+// ═══════════════════════════════════════════════════════
+function getSimHTML(){
+  return document.getElementById('simSrc').textContent;
+}
+
+function loadSim(){
+  const frame=document.getElementById('simframe');
+  const overlay=document.getElementById('simOverlay');
+  frame.srcdoc=getSimHTML();
+  overlay.classList.add('hide');
+}
+
+// ═══════════════════════════════════════════════════════
+//  JAVA TESTER
+// ═══════════════════════════════════════════════════════
+let customFnStore=null;
+
+function resetDef(){
+  customFnStore=null;
+  document.getElementById('jst').textContent='';
+  document.getElementById('jmode').textContent='Using: default algorithm';
+  document.getElementById('jmode').style.color='var(--t2)';
+  const f=document.getElementById('sim2frame');
+  if(f.srcdoc) f.contentWindow?.setCustomFn?.(null);
+}
+
+async function applyJava(){
+  const code=document.getElementById('jcode').value.trim();
+  if(!code){
+    document.getElementById('jst').innerHTML='<span style="color:var(--rd)">✗ Paste your Java code first</span>';
+    return;
+  }
+  const btn=document.getElementById('japply');
+  btn.disabled=true;
+  document.getElementById('jst').innerHTML='<span style="color:var(--gl)">⏳ Translating Java to JavaScript…</span>';
+
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1200,
+        messages:[{role:'user',content:
+`Convert this Java prisoner search function to JavaScript.
+
+REQUIREMENTS:
+- Function signature MUST be exactly: function customSearch(arr, startIndex)
+- arr: JavaScript array of integers (0 to arr.length-1)
+- startIndex: integer 0..arr.length-1
+- Returns {visited: [array of box indices in order], success: boolean}
+- success = true if prisoner found their number within floor(arr.length/2) steps
+- Stop at floor(arr.length/2) steps maximum
+- Use a boolean[] guard against infinite loops
+
+Return ONLY this JSON (no markdown, no extra text):
+{"fn":"function customSearch(arr,startIndex){ ... }"}
+
+Java:
+${code}`}]
+      })
+    });
+
+    const data=await resp.json();
+    const txt=data.content.find(b=>b.type==='text')?.text||'';
+    let fnStr;
+    try{
+      const clean=txt.replace(/```[\w]*\n?|```\n?/g,'').trim();
+      fnStr=JSON.parse(clean).fn;
+    }catch{
+      const m=txt.match(/function\s+customSearch[\s\S]+?\n\s*\}/);
+      if(m) fnStr=m[0]; else throw new Error('Could not parse response');
+    }
+
+    const fn=new Function('return ('+fnStr+')')();
+    const test=fn([1,2,0],0);
+    if(!Array.isArray(test?.visited)||typeof test?.success!=='boolean')
+      throw new Error('Function returned wrong format — expected {visited:[...], success:bool}');
+
+    customFnStore=fn;
+    document.getElementById('jst').innerHTML='<span style="color:var(--gn)">✓ Applied! Running simulation with your algorithm…</span>';
+    document.getElementById('jmode').textContent='Using: YOUR algorithm ✓';
+    document.getElementById('jmode').style.color='var(--gn)';
+
+    // Load or update simulation
+    const div=document.getElementById('sim2div');
+    const frame=document.getElementById('sim2frame');
+    div.classList.add('show');
+
+    if(!frame.srcdoc){
+      frame.srcdoc=getSimHTML();
+      frame.addEventListener('load',()=>{
+        setTimeout(()=>frame.contentWindow?.setCustomFn?.(fn), 200);
+      },{once:true});
+    } else {
+      frame.contentWindow?.setCustomFn?.(fn);
+    }
+    div.scrollIntoView({behavior:'smooth',block:'nearest'});
+
+  }catch(err){
+    document.getElementById('jst').innerHTML=`<span style="color:var(--rd)">✗ ${err.message}</span>`;
+    console.error(err);
+  }finally{
+    btn.disabled=false;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  SCROLL PROGRESS
+// ═══════════════════════════════════════════════════════
+window.addEventListener('scroll',()=>{
+  const pct=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  document.getElementById('pbar').style.width=Math.min(100,pct)+'%';
+});
+</script>
+</body>
+</html>
