@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>100 Prisoners — Visual Simulation</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#03030e;--s1:#07071a;--s2:#0a0a1e;--bd:#14143a;
+  --t0:#8888bb;--t1:#c0c0e0;--wh:#eeeeff;
+  --cy:#00e5ff;--gn:#00ff88;--rd:#ff2255;--gl:#ffc800;--pr:#aa44ff
+}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--t0);font-family:'Syne',sans-serif;display:flex;flex-direction:column}
+
+/* ── HEADER ─────────────────────────────────────────── */
+#hd{background:var(--s1);border-bottom:1px solid var(--bd);padding:7px 16px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+#logo{font-size:1.1rem;font-weight:900;color:var(--wh);letter-spacing:.04em;white-space:nowrap}
+#logo em{color:var(--cy);font-style:normal}
+.ndiv{display:flex;align-items:center;gap:5px}
+.nl{font-size:.5rem;font-family:'JetBrains Mono',monospace;color:var(--bd)}
+.nb{padding:3px 9px;border:1px solid var(--bd);background:transparent;color:var(--t0);font-family:'JetBrains Mono',monospace;font-size:.62rem;cursor:pointer;border-radius:3px;transition:all .12s}
+.nb:hover,.nb.on{border-color:var(--cy);color:var(--cy);background:rgba(0,229,255,.08)}
+.hstats{display:flex;gap:14px;margin-left:auto}
+.hst .hl{font-size:.44rem;text-transform:uppercase;letter-spacing:.1em;color:var(--bd);font-family:'JetBrains Mono',monospace}
+.hst .hv{font-size:.95rem;font-weight:700;font-family:'JetBrains Mono',monospace;line-height:1.1}
+
+/* ── MAIN ────────────────────────────────────────────── */
+#mn{flex:1;display:grid;grid-template-columns:1fr 275px;gap:1px;background:var(--bd);min-height:0;overflow:hidden}
+
+/* ── LEFT ────────────────────────────────────────────── */
+#lp{background:var(--bg);display:flex;flex-direction:column;padding:10px 12px;gap:8px;overflow:hidden;min-height:0}
+.ptl{font-size:.44rem;text-transform:uppercase;letter-spacing:.12em;color:var(--bd);font-family:'JetBrains Mono',monospace;flex-shrink:0}
+
+/* Box grid */
+#bgrid{display:grid;gap:3px;flex:1;align-content:start;min-height:0}
+.bx{border-radius:3px;background:var(--s1);border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;aspect-ratio:1;transition:border-color .07s,background .07s,transform .06s,box-shadow .06s;position:relative;overflow:hidden}
+.bnum{font-size:.3rem;font-family:'JetBrains Mono',monospace;color:var(--bd);line-height:1}
+.bval{font-size:.65rem;font-weight:600;font-family:'JetBrains Mono',monospace;line-height:1.1;transition:color .07s}
+
+/* Prisoner dots */
+#pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(16px,1fr));gap:2px;flex-shrink:0}
+.pc{aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.02);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:.28rem;font-family:'JetBrains Mono',monospace;color:var(--bd);transition:all .1s}
+.pc.act{background:rgba(0,229,255,.14);border-color:var(--cy);color:var(--cy);box-shadow:0 0 5px rgba(0,229,255,.45)}
+.pc.suc{background:rgba(0,255,136,.1);border-color:rgba(0,255,136,.5);color:var(--gn)}
+.pc.fai{background:rgba(255,34,85,.1);border-color:rgba(255,34,85,.5);color:var(--rd)}
+
+/* ── RIGHT ───────────────────────────────────────────── */
+#rp{background:var(--bd);display:flex;flex-direction:column;gap:1px;overflow:hidden}
+.rpnl{background:var(--s1);padding:9px 11px}
+.rpnl.grow{flex:1;min-height:0;display:flex;flex-direction:column}
+
+/* Info */
+#info{font-size:.58rem;font-family:'JetBrains Mono',monospace;line-height:2;color:var(--t0);min-height:80px}
+#info .cy{color:var(--cy)}#info .gn{color:var(--gn)}#info .rd{color:var(--rd)}
+#info .gl{color:var(--gl)}#info .dm{color:var(--bd)}#info .pr{color:var(--pr)}
+
+/* Chart */
+canvas{flex:1;display:block;width:100%;min-height:0}
+
+/* ── JAVA PANEL ──────────────────────────────────────── */
+#jp{background:var(--s2);border-top:1px solid var(--bd);flex-shrink:0}
+#jh{padding:6px 11px;display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;transition:background .12s}
+#jh:hover{background:rgba(255,255,255,.02)}
+#jt{font-size:.44rem;text-transform:uppercase;letter-spacing:.1em;color:var(--t0);font-family:'JetBrains Mono',monospace;flex:1}
+#jbadge{font-size:.42rem;padding:1px 7px;border-radius:2px;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.2);color:var(--cy);font-family:'JetBrains Mono',monospace;white-space:nowrap}
+#jbadge.cu{background:rgba(0,255,136,.08);border-color:rgba(0,255,136,.25);color:var(--gn)}
+#jbody{padding:0 11px 9px;display:none;flex-direction:column;gap:6px}
+#jbody.open{display:flex}
+#jcode{width:100%;height:108px;background:#020209;border:1px solid var(--bd);color:#90b0ff;font-family:'JetBrains Mono',monospace;font-size:.54rem;padding:7px;resize:none;outline:none;border-radius:2px;line-height:1.5}
+#jcode:focus{border-color:rgba(0,229,255,.3)}
+#jst{font-size:.52rem;font-family:'JetBrains Mono',monospace;color:var(--t0);min-height:13px}
+#jst .gn{color:var(--gn)}#jst .rd{color:var(--rd)}#jst .gl{color:var(--gl)}
+.jbtn{padding:4px 11px;border:1px solid rgba(0,229,255,.3);background:rgba(0,229,255,.07);color:var(--cy);font-family:'Syne',sans-serif;font-size:.62rem;font-weight:700;cursor:pointer;border-radius:2px;transition:all .12s}
+.jbtn:hover{background:rgba(0,229,255,.16)}
+.jbtn:disabled{opacity:.4;cursor:not-allowed}
+.jbtn.sec{background:transparent;border-color:var(--bd);color:var(--t0)}
+.jbtn.sec:hover{border-color:var(--t0);color:var(--t1)}
+
+/* ── CONTROLS ────────────────────────────────────────── */
+#ct{background:var(--s1);border-top:1px solid var(--bd);padding:7px 14px;display:flex;align-items:center;gap:9px;flex-shrink:0;flex-wrap:wrap}
+.spw{display:flex;align-items:center;gap:7px;flex:1;min-width:110px}
+.spl{font-size:.46rem;font-family:'JetBrains Mono',monospace;color:var(--bd)}
+input[type=range]{flex:1;-webkit-appearance:none;height:2px;background:var(--bd);outline:none;border-radius:1px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:11px;height:11px;border-radius:50%;background:var(--cy);cursor:pointer;box-shadow:0 0 7px rgba(0,229,255,.7)}
+.cb{padding:5px 12px;border:1px solid var(--bd);background:transparent;color:var(--t1);font-family:'Syne',sans-serif;font-size:.68rem;font-weight:700;cursor:pointer;border-radius:3px;transition:all .12s;white-space:nowrap}
+.cb:hover,.cb.on{border-color:var(--cy);color:var(--cy);background:rgba(0,229,255,.07)}
+.cb.dng:hover{border-color:var(--rd);color:var(--rd);background:rgba(255,34,85,.06)}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
+</style>
+</head>
+<body>
+
+<div id="hd">
+  <div id="logo">100&nbsp;<em>PRISONERS</em></div>
+  <div class="ndiv">
+    <span class="nl">N =</span>
+    <button class="nb" data-n="10"  onclick="setN(10)">10</button>
+    <button class="nb" data-n="20"  onclick="setN(20)">20</button>
+    <button class="nb" data-n="50"  onclick="setN(50)">50</button>
+    <button class="nb on" data-n="100" onclick="setN(100)">100</button>
+  </div>
+  <div class="hstats">
+    <div class="hst"><div class="hl">Round</div><div class="hv" id="hrd" style="color:var(--cy)">0</div></div>
+    <div class="hst"><div class="hl">Wins</div><div class="hv" id="hwn" style="color:var(--gn)">0</div></div>
+    <div class="hst"><div class="hl">Rate</div><div class="hv" id="hrt">—</div></div>
+    <div class="hst"><div class="hl">Theory</div><div class="hv" style="color:var(--bd)">31.18%</div></div>
+  </div>
+</div>
+
+<div id="mn">
+  <div id="lp">
+    <div class="ptl" id="btl">BOXES — colors = cycle · safe ≤ N/2 · dangerous &gt; N/2</div>
+    <div id="bgrid"></div>
+    <div class="ptl" id="ptl2">PRISONERS</div>
+    <div id="pgrid"></div>
+  </div>
+  <div id="rp">
+    <div class="rpnl" style="flex-shrink:0">
+      <div class="ptl">CURRENT STATE</div>
+      <div id="info"><span class="dm">Press ▶ PLAY to start</span></div>
+    </div>
+    <div class="rpnl grow">
+      <div class="ptl">SUCCESS RATE — running avg (window=50) vs theory</div>
+      <canvas id="cv"></canvas>
+    </div>
+    <div id="jp">
+      <div id="jh" onclick="toggleJava()">
+        <span id="jt">▸ JAVA CODE TESTER</span>
+        <span id="jbadge">DEFAULT ALGORITHM</span>
+      </div>
+      <div id="jbody">
+        <textarea id="jcode" placeholder="Paste your Java serialSearchByValueChain function here.&#10;&#10;Claude will translate it to JavaScript and run the simulation with your algorithm — so you can test and visualize any search strategy."></textarea>
+        <div id="jst"></div>
+        <div style="display:flex;gap:7px;justify-content:flex-end">
+          <button class="jbtn sec" onclick="resetDef()">↺ Use Default</button>
+          <button class="jbtn" id="japply" onclick="applyJava()">⚡ Apply &amp; Run</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="ct">
+  <div class="spw">
+    <span class="spl">SLOW</span>
+    <input type="range" id="spd" min="1" max="100" value="30">
+    <span class="spl">FAST</span>
+  </div>
+  <button class="cb on" id="bplay" onclick="togglePlay()">▶ PLAY</button>
+  <button class="cb" onclick="doStep()">STEP</button>
+  <button class="cb" onclick="doInstant()">⚡ INSTANT</button>
+  <button class="cb" onclick="doNewRound()">↺ NEW ROUND</button>
+  <button class="cb dng" onclick="doReset()">✕ RESET ALL</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// CONFIG & STATE
+// ═══════════════════════════════════════════════════════════
+let N=100, HALF=50;
+let perm=[], cycInfo=[], longestCyc=0;
+let round=0, wins=0, hist=[];
+let playing=false, roundDone=true, betweenRounds=false;
+let pIdx=0, chains=[], cStep=0, prevBox=-1;
+let useCustom=false, customFn=null;
+let animTimer=null;
+
+// Cycle color palettes
+const SAFE_HUES  = [180,155,200,130,220,165,240,145,260,175,210,140];
+const DANG_HUES  = [0,20,345,10,35,350,5,28];
+
+// ═══════════════════════════════════════════════════════════
+// CORE MATH
+// ═══════════════════════════════════════════════════════════
+function shuffle(n){
+  const a=[...Array(n).keys()];
+  for(let i=n-1;i>0;i--){const j=0|Math.random()*(i+1);[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+function buildCycles(p){
+  const info=new Array(p.length), vis=new Set();
+  let si=0, di=0, mx=0;
+  for(let s=0;s<p.length;s++){
+    if(vis.has(s)) continue;
+    const cyc=[]; let c=s;
+    while(!vis.has(c)){vis.add(c);cyc.push(c);c=p[c];}
+    const safe=cyc.length<=HALF;
+    const hue=safe?SAFE_HUES[si++%SAFE_HUES.length]:DANG_HUES[di++%DANG_HUES.length];
+    cyc.forEach(b=>info[b]={len:cyc.length,safe,hue});
+    if(cyc.length>mx) mx=cyc.length;
+  }
+  return{info,mx};
+}
+
+// Default chain strategy → returns {visited:[box indices], success:bool}
+function defaultSearch(arr,si){
+  const half=Math.floor(arr.length/2), visited=[];
+  let cur=si;
+  for(let s=0;s<half;s++){
+    visited.push(cur);
+    if(arr[cur]===si) return{visited,success:true};
+    cur=arr[cur];
+  }
+  return{visited,success:false};
+}
+
+function runSearch(arr,si){
+  if(useCustom&&customFn){
+    try{return customFn(arr,si);}catch(e){return defaultSearch(arr,si);}
+  }
+  return defaultSearch(arr,si);
+}
+
+// ═══════════════════════════════════════════════════════════
+// DOM BUILD
+// ═══════════════════════════════════════════════════════════
+function buildBoxGrid(){
+  const g=document.getElementById('bgrid'); g.innerHTML='';
+  const cols=Math.min(10,N);
+  g.style.gridTemplateColumns=`repeat(${cols},1fr)`;
+  document.getElementById('btl').textContent=
+    `BOXES (${N}) — colors = cycle  ·  cool = safe ≤${HALF}  ·  warm = danger >${HALF}`;
+  for(let i=0;i<N;i++){
+    const b=document.createElement('div');
+    b.className='bx'; b.id='bx'+i;
+    b.innerHTML=`<div class="bnum">${i}</div><div class="bval" id="bv${i}">?</div>`;
+    g.appendChild(b);
+  }
+}
+
+function buildPrisGrid(){
+  const g=document.getElementById('pgrid'); g.innerHTML='';
+  document.getElementById('ptl2').textContent=`PRISONERS (${N})`;
+  for(let i=0;i<N;i++){
+    const p=document.createElement('div');
+    p.className='pc'; p.id='pc'+i;
+    if(N<=20) p.textContent=i;
+    g.appendChild(p);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER HELPERS
+// ═══════════════════════════════════════════════════════════
+function rxCycle(i){
+  const el=document.getElementById('bx'+i), v=document.getElementById('bv'+i);
+  const c=cycInfo[i], a=(0.03+(c.len/N)*0.08).toFixed(3);
+  el.style.background=`hsla(${c.hue},68%,55%,${a})`;
+  el.style.borderColor=`hsla(${c.hue},68%,55%,${c.safe?0.18:0.42})`;
+  el.style.boxShadow=''; el.style.transform='';
+  v.style.color=`hsla(${c.hue},60%,55%,0.35)`;
+  v.textContent='?';
+}
+
+function rxVisit(i){
+  const el=document.getElementById('bx'+i), v=document.getElementById('bv'+i);
+  el.style.background='rgba(0,229,255,.07)';
+  el.style.borderColor='rgba(0,229,255,.32)';
+  el.style.boxShadow=''; el.style.transform='';
+  v.style.color='var(--cy)'; v.textContent=perm[i];
+}
+
+function rxActive(i){
+  const el=document.getElementById('bx'+i), v=document.getElementById('bv'+i);
+  el.style.background='rgba(0,229,255,.19)';
+  el.style.borderColor='var(--cy)';
+  el.style.transform='scale(1.1)';
+  el.style.boxShadow='0 0 16px rgba(0,229,255,.75),0 0 5px rgba(0,229,255,.4)';
+  v.style.color='#fff'; v.textContent=perm[i];
+}
+
+function rxResult(i,ok){
+  const el=document.getElementById('bx'+i), v=document.getElementById('bv'+i);
+  el.style.transform=''; el.style.boxShadow='';
+  if(ok){
+    el.style.background='rgba(0,255,136,.07)';
+    el.style.borderColor='rgba(0,255,136,.38)';
+    v.style.color='var(--gn)';
+  } else {
+    el.style.background='rgba(255,34,85,.07)';
+    el.style.borderColor='rgba(255,34,85,.38)';
+    v.style.color='var(--rd)';
+  }
+  v.textContent=perm[i];
+}
+
+function sp(i,s){const e=document.getElementById('pc'+i);if(e)e.className='pc'+(s?' '+s:'');}
+function setInfo(h){document.getElementById('info').innerHTML=h;}
+
+// ═══════════════════════════════════════════════════════════
+// ROUND LIFECYCLE
+// ═══════════════════════════════════════════════════════════
+function initRound(){
+  perm=shuffle(N);
+  const{info,mx}=buildCycles(perm);
+  cycInfo=info; longestCyc=mx;
+  pIdx=0; cStep=0; prevBox=-1;
+  roundDone=false; betweenRounds=false;
+
+  // Pre-compute all chains
+  chains=[];
+  for(let i=0;i<N;i++) chains.push(runSearch(perm,i));
+
+  // Reset visuals
+  for(let i=0;i<N;i++){rxCycle(i); sp(i,'');}
+  sp(0,'act');
+
+  const safe=longestCyc<=HALF;
+  const algo=useCustom?'<span class="pr">CUSTOM</span>':'<span class="cy">CHAIN</span>';
+  setInfo(
+    `<span class="cy">Round ${round+1}</span> &nbsp;|&nbsp; Algorithm: ${algo}<br>`+
+    `Longest cycle: <span class="${safe?'gn':'rd'}">${longestCyc} ${safe?'≤':'>'} ${HALF}</span><br>`+
+    `<span class="${safe?'gn':'rd'} ">${safe?'✓ Strategy CAN succeed':'✗ Round WILL fail'}</span>`
+  );
+}
+
+function advStep(){
+  if(pIdx>=N){doEndRound();return;}
+  const{visited,success}=chains[pIdx];
+
+  if(cStep===visited.length){
+    // Prisoner done — color chain and move on
+    if(prevBox!==-1){prevBox=-1;}
+    visited.forEach(b=>rxResult(b,success));
+    sp(pIdx,success?'suc':'fai');
+    pIdx++; cStep=0;
+    if(pIdx>=N){doEndRound();return;}
+    sp(pIdx,'act');
+    return;
+  }
+
+  // Deactivate prev box
+  if(prevBox!==-1) rxVisit(prevBox);
+
+  const box=visited[cStep];
+  rxActive(box); prevBox=box;
+
+  const val=perm[box], found=(val===pIdx);
+  const trail=visited.slice(Math.max(0,cStep-4),cStep+1).join(' → ');
+  const cycEl=cycInfo[box];
+  setInfo(
+    `<span class="cy">Prisoner ${pIdx}</span> &nbsp;|&nbsp; step ${cStep+1} / ${HALF}<br>`+
+    `Box <span class="cy">${box}</span> → value <span class="${found?'gn':'cy'}">${val}</span>`+
+    (found?` <span class="gn">= ${pIdx} ✓ FOUND</span>`:'')+`<br>`+
+    `${trail}<br>`+
+    `Cycle length: <span class="${cycEl.safe?'gn':'rd'}">${cycEl.len}</span>`+
+    ` &nbsp;·&nbsp; Longest: <span class="${longestCyc<=HALF?'gn':'rd'}">${longestCyc}</span>`
+  );
+  cStep++;
+}
+
+function doEndRound(){
+  roundDone=true; prevBox=-1;
+  round++;
+  const won=chains.every(c=>c.success);
+  if(won) wins++;
+  hist.push(won?1:0);
+  if(hist.length>3000) hist.shift();
+
+  document.getElementById('hrd').textContent=round;
+  document.getElementById('hwn').textContent=wins;
+  const rate=(wins/round*100).toFixed(1)+'%';
+  const re=document.getElementById('hrt');
+  re.textContent=rate;
+  re.style.color=wins/round>=0.27?'var(--gn)':'var(--gl)';
+
+  setInfo(
+    `<span class="${won?'gn':'rd'}">${won?'✓ ALL '+N+' PRISONERS FREED!':'✗ AT LEAST ONE FAILED'}</span><br>`+
+    `Longest cycle: <span class="${longestCyc<=HALF?'gn':'rd'}">${longestCyc} (limit ${HALF})</span><br>`+
+    `Rate: <span class="${wins/round>=0.27?'gn':'gl'}">${rate}</span> &nbsp;·&nbsp; Theory: <span class="gl">31.18%</span><br>`+
+    `<span class="dm">${playing?'Next round starting...':'Press ▶ PLAY to continue'}</span>`
+  );
+  drawChart();
+}
+
+// ═══════════════════════════════════════════════════════════
+// ANIMATION LOOP
+// ═══════════════════════════════════════════════════════════
+function getDelay(){
+  const v=+document.getElementById('spd').value;
+  return Math.round(420*Math.pow(0.017,(v-1)/99));
+}
+
+function schedNext(d){
+  clearTimeout(animTimer);
+  if(!playing) return;
+  animTimer=setTimeout(runTick,d!==undefined?d:getDelay());
+}
+
+function runTick(){
+  if(!playing) return;
+  if(betweenRounds){betweenRounds=false;initRound();schedNext();return;}
+  if(roundDone){betweenRounds=true;schedNext(700);return;}
+  advStep();
+  schedNext();
+}
+
+// ═══════════════════════════════════════════════════════════
+// CONTROLS
+// ═══════════════════════════════════════════════════════════
+function setPlayBtn(on){
+  const b=document.getElementById('bplay');
+  if(on){b.textContent='⏸ PAUSE';b.classList.add('on');}
+  else{b.textContent='▶ PLAY';b.classList.remove('on');}
+}
+
+function togglePlay(){
+  playing=!playing;
+  clearTimeout(animTimer);
+  setPlayBtn(playing);
+  if(playing){
+    if(roundDone&&!betweenRounds) initRound();
+    schedNext();
+  }
+}
+
+function doStep(){
+  if(playing){playing=false;clearTimeout(animTimer);setPlayBtn(false);}
+  if(roundDone&&!betweenRounds) initRound();
+  if(!roundDone) advStep();
+}
+
+function doInstant(){
+  clearTimeout(animTimer);
+  const wp=playing; playing=false;
+  if(roundDone) initRound();
+  if(prevBox!==-1){rxVisit(prevBox);prevBox=-1;}
+  for(let i=0;i<N;i++){
+    chains[i].visited.forEach(b=>rxResult(b,chains[i].success));
+    sp(i,chains[i].success?'suc':'fai');
+  }
+  pIdx=N;
+  doEndRound();
+  if(wp){
+    playing=true; setPlayBtn(true);
+    betweenRounds=true; schedNext(600);
+  }
+}
+
+function doNewRound(){
+  clearTimeout(animTimer); betweenRounds=false;
+  initRound();
+  if(playing) schedNext();
+}
+
+function doReset(){
+  clearTimeout(animTimer);
+  playing=false; roundDone=true; betweenRounds=false;
+  round=0; wins=0; hist=[];
+  setPlayBtn(false);
+  document.getElementById('hrd').textContent='0';
+  document.getElementById('hwn').textContent='0';
+  document.getElementById('hrt').textContent='—';
+  document.getElementById('hrt').style.color='';
+  initRound(); drawChart();
+}
+
+function setN(n){
+  clearTimeout(animTimer);
+  playing=false; roundDone=true; betweenRounds=false;
+  round=0; wins=0; hist=[];
+  N=n; HALF=n/2;
+  setPlayBtn(false);
+  document.getElementById('hrd').textContent='0';
+  document.getElementById('hwn').textContent='0';
+  document.getElementById('hrt').textContent='—';
+  document.getElementById('hrt').style.color='';
+  document.querySelectorAll('.nb').forEach(b=>b.classList.toggle('on',+b.dataset.n===n));
+  buildBoxGrid(); buildPrisGrid(); initRound(); drawChart();
+}
+
+// ═══════════════════════════════════════════════════════════
+// JAVA PANEL
+// ═══════════════════════════════════════════════════════════
+function toggleJava(){
+  const jb=document.getElementById('jbody'), jt=document.getElementById('jt');
+  const open=jb.classList.toggle('open');
+  jt.textContent=(open?'▾ ':'▸ ')+'JAVA CODE TESTER';
+}
+
+function resetDef(){
+  useCustom=false; customFn=null;
+  document.getElementById('jbadge').textContent='DEFAULT ALGORITHM';
+  document.getElementById('jbadge').className='';
+  document.getElementById('jst').innerHTML='<span style="color:var(--bd)">Using default chain strategy</span>';
+  clearTimeout(animTimer); initRound(); if(playing) schedNext();
+}
+
+async function applyJava(){
+  const code=document.getElementById('jcode').value.trim();
+  if(!code){
+    document.getElementById('jst').innerHTML='<span class="rd">✗ Paste your Java code first</span>';
+    return;
+  }
+  const btn=document.getElementById('japply');
+  btn.disabled=true;
+  document.getElementById('jst').innerHTML='<span class="gl">⏳ Claude is translating your Java to JS...</span>';
+
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1200,
+        messages:[{role:'user',content:
+`Convert this Java prisoner search function to JavaScript.
+
+STRICT REQUIREMENTS:
+- Function signature MUST be exactly: function customSearch(arr, startIndex)
+- arr: JavaScript array of integers (values 0 to arr.length-1)
+- startIndex: the prisoner's own number (integer 0..arr.length-1)
+- Returns an object: {visited: [list of box indices opened, in order], success: boolean}
+- success = true if prisoner found their number within floor(arr.length/2) steps
+- Stop at floor(arr.length/2) steps maximum
+- Handle edge cases (cycles, out-of-bounds) safely with a visited-set guard
+
+Return ONLY this JSON — no markdown, no extra text:
+{"fn":"function customSearch(arr,startIndex){...}"}
+
+Java code:
+${code}`}]
+      })
+    });
+
+    const data=await resp.json();
+    const txt=data.content.find(b=>b.type==='text')?.text||'';
+
+    let fnStr;
+    try{
+      const clean=txt.replace(/```[\w]*\n?|```\n?/g,'').trim();
+      fnStr=JSON.parse(clean).fn;
+    }catch{
+      const m=txt.match(/function\s+customSearch[\s\S]+?\n\s*\}/);
+      if(m) fnStr=m[0]; else throw new Error('Could not parse Claude response');
+    }
+
+    // Eval and validate
+    const fn=new Function('return ('+fnStr+')')();
+    const test=fn([1,2,0],0);
+    if(!Array.isArray(test?.visited)||typeof test?.success!=='boolean')
+      throw new Error('Function returned unexpected format — expected {visited:[...], success:bool}');
+
+    customFn=fn; useCustom=true;
+    document.getElementById('jbadge').textContent='CUSTOM ✓';
+    document.getElementById('jbadge').className='cu';
+    document.getElementById('jst').innerHTML='<span class="gn">✓ Applied! Starting new round with your algorithm...</span>';
+    clearTimeout(animTimer); initRound(); if(playing) schedNext();
+
+  }catch(err){
+    document.getElementById('jst').innerHTML=`<span class="rd">✗ ${err.message}</span>`;
+    console.error(err);
+  }finally{btn.disabled=false;}
+}
+
+// ═══════════════════════════════════════════════════════════
+// CHART
+// ═══════════════════════════════════════════════════════════
+function drawChart(){
+  const cv=document.getElementById('cv');
+  const W=cv.offsetWidth, H=cv.offsetHeight;
+  if(!W||!H) return;
+  cv.width=W; cv.height=H;
+  const ctx=cv.getContext('2d');
+
+  // Background
+  ctx.fillStyle='#040410'; ctx.fillRect(0,0,W,H);
+
+  // Grid lines
+  [[0.1,false],[0.2,false],[0.3118,true],[0.4,false],[0.5,false]].forEach(([v,isT])=>{
+    const y=H-v*H;
+    ctx.strokeStyle=isT?'rgba(255,200,0,.22)':'rgba(255,255,255,.04)';
+    ctx.lineWidth=isT?1.5:1; ctx.setLineDash(isT?[4,5]:[]);
+    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle=isT?'rgba(255,200,0,.8)':'rgba(255,255,255,.18)';
+    ctx.font='8px JetBrains Mono,monospace'; ctx.textAlign='right';
+    ctx.fillText(isT?'31.18%':Math.round(v*100)+'%', W-3, y-2);
+  });
+
+  if(hist.length<2){
+    ctx.fillStyle='rgba(255,255,255,.1)';
+    ctx.font='9px JetBrains Mono,monospace'; ctx.textAlign='center';
+    ctx.fillText('play to generate history',W/2,H/2);
+    return;
+  }
+
+  // Per-round bars
+  const bw=Math.max(1,W/hist.length);
+  hist.forEach((w,i)=>{
+    const x=i*bw, bh=w?H*.045:H*.025;
+    ctx.fillStyle=w?'rgba(0,255,136,.14)':'rgba(255,34,85,.1)';
+    ctx.fillRect(x,H-bh,bw,bh);
+  });
+
+  // Running avg (window 50)
+  const pts=hist.map((_,i)=>{
+    const wn=Math.min(50,i+1), sl=hist.slice(i-wn+1,i+1);
+    const avg=sl.reduce((a,b)=>a+b,0)/sl.length;
+    return{x:(i/(hist.length-1||1))*W, y:H-avg*H};
+  });
+
+  // Fill area
+  const g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'rgba(0,255,136,.2)'); g.addColorStop(1,'rgba(0,255,136,.01)');
+  ctx.fillStyle=g;
+  ctx.beginPath(); ctx.moveTo(pts[0].x,H);
+  pts.forEach(p=>ctx.lineTo(p.x,p.y));
+  ctx.lineTo(pts[pts.length-1].x,H); ctx.closePath(); ctx.fill();
+
+  // Line
+  ctx.strokeStyle='rgba(0,255,136,.88)'; ctx.lineWidth=1.8; ctx.setLineDash([]);
+  ctx.beginPath(); pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)); ctx.stroke();
+
+  // End dot + label
+  const l=pts[pts.length-1];
+  ctx.fillStyle='#00ff88'; ctx.beginPath(); ctx.arc(l.x,l.y,3.5,0,Math.PI*2); ctx.fill();
+  if(round>0){
+    ctx.fillStyle='rgba(0,255,136,.9)'; ctx.font='bold 8px JetBrains Mono,monospace';
+    ctx.textAlign='right'; ctx.fillText((wins/round*100).toFixed(1)+'%',W-4,l.y-6);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+buildBoxGrid(); buildPrisGrid(); initRound(); drawChart();
+window.addEventListener('resize', drawChart);
+</script>
+</body>
+</html>

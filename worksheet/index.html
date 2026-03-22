@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>בעיית 100 האסירים — דף עבודה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f7f6f2;--card:#ffffff;--bd:#e5e2d8;--bd2:#d0ccbf;
+  --t0:#2a2820;--t1:#5a5648;--t2:#8a8578;
+  --cy:#0077cc;--gn:#00875a;--rd:#cc2244;--gl:#b06000;--pr:#6633cc;
+  --cy-l:#e8f4ff;--gn-l:#e6f7f0;--rd-l:#fff0f3;--gl-l:#fff7e6;--pr-l:#f3eeff;
+  --ink:#1a1814;
+  --r:8px;
+  --shadow:0 2px 12px rgba(0,0,0,.07),0 1px 3px rgba(0,0,0,.05)
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t0);font-family:'Heebo',sans-serif;font-size:15px;line-height:1.75}
+
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 80px}
+
+/* ── HEADER ── */
+#hd{background:var(--ink);color:#fff;padding:36px 32px 32px;margin-bottom:36px}
+.hd-inner{max-width:860px;margin:0 auto}
+.badge{display:inline-block;font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border:1px solid rgba(255,255,255,.2);border-radius:3px;color:rgba(255,255,255,.55);margin-bottom:14px;font-family:'JetBrains Mono',monospace}
+h1{font-family:'Heebo',sans-serif;font-size:2.1rem;font-weight:900;line-height:1.2;margin-bottom:8px}
+h1 em{color:#7dd3fc;font-style:normal}
+.sub{color:rgba(255,255,255,.45);font-size:.85rem}
+
+/* ── SECTIONS ── */
+.sec{margin-bottom:32px}
+.sec-hd{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.sec-num{width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;font-family:'JetBrains Mono',monospace;flex-shrink:0}
+.sec-title{font-size:1.1rem;font-weight:800;color:var(--ink)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:22px 24px;box-shadow:var(--shadow)}
+p{color:var(--t1);margin-bottom:12px;font-size:.93rem}
+p:last-child{margin-bottom:0}
+strong{color:var(--t0)}
+
+/* ── CALLOUTS ── */
+.callout{border-radius:6px;padding:14px 16px;margin:14px 0;font-size:.88rem;border-right:3px solid;border-left:none}
+.callout.info{background:var(--cy-l);border-color:var(--cy);color:#003d66}
+.callout.warn{background:var(--gl-l);border-color:var(--gl);color:#5a3000}
+.callout.tip {background:var(--gn-l);border-color:var(--gn);color:#004a2f}
+.callout.key {background:var(--pr-l);border-color:var(--pr);color:#3d1a7a}
+.callout b{font-weight:700}
+
+/* ── PROB COMPARE ── */
+.prob-compare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.prob-box{border-radius:6px;padding:16px;text-align:center}
+.prob-box.bad{background:var(--rd-l);border:1px solid #ffc0cc}
+.prob-box.good{background:var(--gn-l);border:1px solid #b0e8d0}
+.prob-box .pb-label{font-size:.72rem;font-weight:700;margin-bottom:8px;opacity:.65}
+.prob-box .pb-val{font-size:1.5rem;font-weight:800;font-family:'JetBrains Mono',monospace;line-height:1}
+.prob-box.bad .pb-val{color:var(--rd)}
+.prob-box.good .pb-val{color:var(--gn)}
+.prob-box .pb-sub{font-size:.72rem;margin-top:6px;opacity:.65}
+
+/* ── MINI DEMO ── */
+#mini{background:#f9f8f5;border:1px solid var(--bd);border-radius:6px;padding:16px;margin:14px 0}
+.mini-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t2);margin-bottom:10px;font-family:'JetBrains Mono',monospace}
+#mini-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;margin-bottom:10px}
+.mb{aspect-ratio:1;border-radius:3px;border:1px solid var(--bd);background:#fff;display:flex;align-items:center;justify-content:center;font-size:.52rem;font-family:'JetBrains Mono',monospace;color:var(--t2);transition:all .12s}
+.mb.active{background:#dbeafe;border-color:#3b82f6;color:#1d4ed8;font-weight:700;transform:scale(1.12);box-shadow:0 0 8px rgba(59,130,246,.5)}
+.mb.visited{background:#f0f9ff;border-color:#93c5fd;color:#2563eb}
+.mb.found{background:#d1fae5;border-color:#34d399;color:#065f46;font-weight:700}
+.mb.fail{background:#fee2e2;border-color:#fca5a5;color:#991b1b}
+#mini-msg{font-size:.8rem;color:var(--t1);min-height:22px}
+.mini-btn{padding:4px 14px;border:1px solid var(--bd2);background:#fff;color:var(--t1);font-size:.75rem;font-weight:700;cursor:pointer;border-radius:4px;transition:all .1s;font-family:'Heebo',sans-serif}
+.mini-btn:hover{border-color:var(--cy);color:var(--cy)}
+
+/* ── BIG SIM ── */
+#simdiv{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);background:#03030e;height:420px;position:relative}
+#simframe{width:100%;height:100%;border:none;display:block}
+.sim-overlay{position:absolute;inset:0;background:rgba(3,3,14,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .3s}
+.sim-overlay.hide{opacity:0;pointer-events:none}
+.sim-overlay p{color:rgba(255,255,255,.6);font-size:.85rem;text-align:center}
+.sim-load-btn{padding:10px 24px;background:#0077cc;color:#fff;border:none;border-radius:5px;font-size:.88rem;font-weight:700;cursor:pointer;font-family:'Heebo',sans-serif}
+.sim-load-btn:hover{background:#005fa3}
+
+/* ── STEP ACCORDION ── */
+.step{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+.step-hd{background:#f9f8f5;padding:13px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.step-hd:hover{background:#f3f2ee}
+.step-tag{font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:3px;font-family:'JetBrains Mono',monospace;white-space:nowrap}
+.step-tag.given{background:#e0f2fe;color:#0369a1}
+.step-tag.todo {background:#fef3c7;color:#92400e}
+.step-name{font-size:.85rem;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--ink);flex:1;direction:ltr;text-align:left}
+.step-caret{font-size:.7rem;color:var(--t2);transition:transform .2s;flex-shrink:0}
+.step-body{padding:18px;display:none}
+.step-body.open{display:block}
+
+/* ── CODE ── */
+/* Code blocks are always LTR */
+pre{background:#1a1814;color:#cdd4e0;border-radius:5px;padding:16px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:.76rem;line-height:1.75;margin:10px 0;border:1px solid #2d2b26;direction:ltr;text-align:left}
+code{font-family:'JetBrains Mono',monospace;font-size:.82rem;background:#f0ede6;padding:1px 5px;border-radius:3px;direction:ltr;unicode-bidi:embed}
+/* Syntax colors — all must contrast clearly on #1a1814 background */
+.c-kw {color:#c792ea}          /* keywords: if, while, return, new   — purple   */
+.c-type{color:#82aaff}          /* types: int, boolean, String, Random — blue     */
+.c-str {color:#c3e88d}          /* strings: "..."                      — green    */
+.c-fn  {color:#89ddff}          /* function names                      — cyan     */
+.c-num {color:#f78c6c}          /* numeric literals: 0, 1, -1          — orange   */
+.c-ret {color:#c792ea}          /* static, void, public                — purple   */
+.c-cmt {color:#7f9faf;font-style:italic} /* comments                   — steel (readable!) */
+.c-ann {color:#7f9faf}          /* annotations / secondary             — steel    */
+.c-todo{color:#ffd700;background:rgba(255,215,0,.1);border-radius:2px;padding:0 3px;font-weight:600} /* TODO — gold */
+
+ul.hints{padding-right:18px;padding-left:0;margin:8px 0}
+ul.hints li{font-size:.86rem;color:var(--t1);margin-bottom:6px}
+ul.hints li::marker{color:var(--cy)}
+
+/* ── TESTER ── */
+#tester{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+.tester-hd{background:var(--ink);color:#fff;padding:14px 20px;display:flex;align-items:center;gap:10px}
+.tester-hd h3{font-size:.95rem;font-weight:700;flex:1}
+.tester-hd .badge2{font-size:.58rem;padding:2px 8px;border-radius:2px;background:rgba(0,229,255,.15);border:1px solid rgba(0,229,255,.3);color:#7dd3fc;font-family:'JetBrains Mono',monospace}
+.tester-body{padding:18px;background:#fff}
+label.lbl{display:block;font-size:.75rem;font-weight:700;color:var(--t2);margin-bottom:7px}
+#jcode{width:100%;height:200px;background:#1a1814;color:#a8d8ff;border:1px solid #2d2b26;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:.76rem;padding:12px;resize:vertical;outline:none;line-height:1.7;direction:ltr;text-align:left}
+#jcode:focus{border-color:#3b82f6;box-shadow:0 0 0 2px rgba(59,130,246,.15)}
+#jst{min-height:20px;font-size:.8rem;font-family:'JetBrains Mono',monospace;margin:10px 0;color:var(--t2)}
+.tester-btns{display:flex;gap:9px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.tbtn{padding:8px 18px;border:none;border-radius:5px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:'Heebo',sans-serif;transition:all .12s}
+.tbtn.pri{background:var(--cy);color:#fff}
+.tbtn.pri:hover{background:#005fa3}
+.tbtn.sec{background:#f3f2ee;color:var(--t0);border:1px solid var(--bd2)}
+.tbtn.sec:hover{border-color:var(--t0)}
+.tbtn:disabled{opacity:.4;cursor:not-allowed}
+#sim2div{margin-top:16px;border:1px solid var(--bd);border-radius:6px;overflow:hidden;height:380px;display:none}
+#sim2div.show{display:block}
+#sim2frame{width:100%;height:100%;border:none;display:block}
+
+/* ── QUESTIONS ── */
+.q-item{border:1px solid var(--bd);border-radius:6px;padding:16px 18px;margin-bottom:12px;background:#fff}
+.q-num{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--cy);font-family:'JetBrains Mono',monospace;margin-bottom:6px}
+.q-text{font-size:.92rem;color:var(--t0);font-weight:600;margin-bottom:10px}
+.q-area{width:100%;min-height:64px;border:1px solid var(--bd);border-radius:5px;padding:9px 12px;font-family:'Heebo',sans-serif;font-size:.85rem;color:var(--t0);resize:vertical;outline:none;background:#fafaf8;line-height:1.65}
+.q-area:focus{border-color:var(--cy);box-shadow:0 0 0 2px rgba(0,119,204,.1)}
+.q-area::placeholder{color:var(--t2)}
+
+/* ── ANSWERS ── */
+.ans-toggle{display:flex;align-items:center;gap:8px;margin-top:10px;cursor:pointer;user-select:none;width:fit-content}
+.ans-toggle-btn{padding:4px 12px;font-size:.75rem;font-weight:700;border:1px dashed var(--bd2);background:transparent;color:var(--t2);border-radius:4px;cursor:pointer;font-family:'Heebo',sans-serif;transition:all .15s}
+.ans-toggle-btn:hover{border-color:var(--gn);color:var(--gn);background:var(--gn-l)}
+.ans-toggle-btn.open{border-color:var(--gn);color:var(--gn);background:var(--gn-l)}
+.ans-body{display:none;margin-top:10px;padding:14px 16px;background:var(--gn-l);border:1px solid rgba(0,135,90,.2);border-radius:6px;font-size:.88rem;color:#004a2f;line-height:1.75}
+.ans-body.open{display:block}
+.ans-body p{color:#004a2f;font-size:.88rem;margin-bottom:8px}
+.ans-body p:last-child{margin-bottom:0}
+.ans-body strong{color:#003320}
+.ans-body .ans-sep{border:none;border-top:1px solid rgba(0,135,90,.15);margin:10px 0}
+
+/* ── SAVE BAR ── */
+#savebar{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid var(--bd);border-radius:var(--r);padding:12px 18px;margin-top:8px;box-shadow:var(--shadow);flex-wrap:wrap;gap:10px}
+#savestatus{font-size:.78rem;font-family:'JetBrains Mono',monospace;color:var(--t2)}
+#savestatus.saved{color:var(--gn)}
+#savestatus.dirty{color:var(--gl)}
+.savebtn{padding:7px 16px;border:1px solid var(--bd2);background:#f9f8f5;color:var(--t0);font-size:.78rem;font-weight:700;cursor:pointer;border-radius:5px;font-family:'Heebo',sans-serif;transition:all .12s}
+.savebtn:hover{border-color:var(--cy);color:var(--cy);background:var(--cy-l)}
+.savebtn.sec:hover{border-color:var(--rd);color:var(--rd);background:var(--rd-l)}
+
+/* ── PRINT / PDF ── */
+@media print{
+  #progress,#hd .sub,#savebar,.ans-toggle-btn,.mini-btn,
+  #simdiv,#tester,#sim2div,#ct,
+  .step-tag.given,.sim-overlay{display:none!important}
+  body{background:#fff;color:#000;font-size:12pt}
+  .wrap{max-width:100%;padding:0}
+  #hd{background:#fff!important;color:#000!important;border-bottom:2px solid #000;padding:16px 0}
+  #hd h1{color:#000!important;font-size:18pt}
+  #hd h1 em{color:#000!important}
+  .card,.q-item,.step{box-shadow:none!important;border:1px solid #ccc!important;break-inside:avoid}
+  .callout{border:1px solid #ccc!important;background:#f9f9f9!important;color:#000!important}
+  pre{background:#f4f4f4!important;color:#000!important;border:1px solid #ccc!important;font-size:8pt}
+  .c-kw,.c-type,.c-fn,.c-str,.c-num,.c-ret,.c-cmt,.c-ann,.c-todo{color:#000!important}
+  .q-area{min-height:80pt;border:1pt solid #999!important;background:#fff!important}
+  .ans-body{display:none!important}
+  .prob-box.bad,.prob-box.good{background:#f9f9f9!important;border:1px solid #ccc!important}
+  .prob-box .pb-val{color:#000!important}
+  #hd{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .sec-num{background:#000!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #student-info input{border:1pt solid #999!important;background:#fff!important;font-size:11pt}
+}
+
+/* ── PROGRESS ── */
+#progress{position:fixed;top:0;left:0;right:0;height:3px;background:var(--bd);z-index:100}
+#pbar{height:100%;background:linear-gradient(90deg,#0077cc,#00875a);width:0%;transition:width .3s}
+
+.anchor{scroll-margin-top:20px}
+
+@media(max-width:600px){
+  .prob-compare{grid-template-columns:1fr}
+  h1{font-size:1.5rem}
+  #simdiv{height:320px}
+  #sim2div{height:300px}
+}
+</style>
+</head>
+<body>
+
+<div id="progress"><div id="pbar"></div></div>
+
+<!-- HEADER -->
+<div id="hd">
+  <div class="hd-inner">
+    <div class="badge">Lab · Java · כיתה י׳</div>
+    <h1>בעיית <em>100 האסירים</em></h1>
+    <p class="sub">סימולציה · הסתברות · עיצוב אלגוריתמים</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ══════════════════════════════════════════
+     § 1  הבעיה
+══════════════════════════════════════════ -->
+<div class="sec anchor" id="s1">
+  <div class="sec-hd">
+    <div class="sec-num">1</div>
+    <div class="sec-title">הבנת הבעיה</div>
+  </div>
+  <div class="card">
+    <p><strong>ההגדרה.</strong> ל-100 אסירים יש מספרים ייחודיים מ-0 עד 99. בחדר נפרד יש 100 קופסאות, גם הן ממוספרות 0–99. בכל קופסה יש פתק עם מספר — הסדר הוא אקראי לחלוטין, מספר אחד לכל קופסה.</p>
+
+    <p>כל אסיר נכנס לחדר לבד ורשאי לפתוח <strong>עד 50 קופסאות</strong>. אם מצא את הפתק עם המספר שלו — הצליח. לאחר מכן יוצא והחדר חוזר למצבו המקורי. <strong>האסירים אינם יכולים לתקשר ביניהם לאחר תחילת המשחק.</strong></p>
+
+    <div class="callout warn"><b>תנאי הניצחון:</b> כל 100 האסירים חייבים למצוא את המספר שלהם. אם אפילו אחד נכשל — כולם נכשלים.</div>
+
+    <div class="prob-compare">
+      <div class="prob-box bad">
+        <div class="pb-label">אסטרטגיה אקראית</div>
+        <div class="pb-val">(½)¹⁰⁰</div>
+        <div class="pb-sub">פחות מ-1 לטריליון<br>בלתי אפשרי למעשה</div>
+      </div>
+      <div class="prob-box good">
+        <div class="pb-label">אסטרטגיית השרשרת</div>
+        <div class="pb-val">≈ 31.18%</div>
+        <div class="pb-sub">1 − ln(2) ≈ 0.3118<br>הסיכוי מפתיע לטובה!</div>
+      </div>
+    </div>
+
+    <p><strong>אסטרטגיית השרשרת.</strong> כל אסיר מתחיל בקופסה שמספרה הוא המספר שלו, קורא את הערך שבפנים, ועובר לקופסה עם אותו מספר — וכך הלאה בשרשרת, עד שמוצא את המספר שלו או שמגיע למגבלת 50 הפתיחות.</p>
+
+    <div class="callout key"><b>תובנת המפתח:</b> סידור הפתקים מגדיר <em>פרמוטציה</em> מתמטית. כל פרמוטציה מתפרקת למחזורים (<em>cycles</em>) נפרדים. האסטרטגיה מצליחה אם ורק אם <b>אף מחזור אינו ארוך מ-50</b>.</div>
+
+    <p>נסו לצעוד בעצמכם בדמו הבא כדי לראות איך השרשרת עובדת:</p>
+
+    <div id="mini">
+      <div class="mini-title">DEMO — 10 קופסאות · אסיר #0 עוקב אחרי השרשרת</div>
+      <div id="mini-grid"></div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
+        <button class="mini-btn" onclick="miniStep()">▶ צעד</button>
+        <button class="mini-btn" onclick="miniReset()">↺ איפוס</button>
+        <div id="mini-msg">לחצו ▶ צעד כדי להתחיל</div>
+      </div>
+    </div>
+
+    <div class="callout tip"><b>למה זה עובד?</b> כל האסירים עוקבים אחרי שרשראות מאותה פרמוטציה — הגורלות שלהם <em>תלויים</em> זה בזה. ההסתברות שאף מחזור לא יעלה על 50 שווה בדיוק 1 − ln(2) ≈ 31.18%.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     § 2  סימולציה
+══════════════════════════════════════════ -->
+<div class="sec anchor" id="s2">
+  <div class="sec-hd">
+    <div class="sec-num">2</div>
+    <div class="sec-title">סימולציה ויזואלית — צפו באסטרטגיה</div>
+  </div>
+  <div class="card">
+    <p>לפני כתיבת קוד, הקדישו כמה דקות לצפייה בסימולציה. שימו לב כיצד <strong>צבעי הקופסאות חושפים את מבנה המחזורים</strong> — גוונים קרים (כחול/ציאן) למחזורים בטוחים ≤ 50, גוונים חמים (אדום/כתום) למחזורים מסוכנים. ניתן לדעת אם הסיבוב יצליח עוד לפני שאסיר אחד נכנס.</p>
+    <div id="simdiv">
+      <iframe id="simframe" title="100 Prisoners Simulation"></iframe>
+      <div class="sim-overlay" id="simOverlay">
+        <p>לחצו לטעינת הסימולציה האינטראקטיבית</p>
+        <button class="sim-load-btn" onclick="loadSim()">טען סימולציה</button>
+      </div>
+    </div>
+    <p style="margin-top:12px;font-size:.82rem;color:var(--t2)">טיפ: בחרו <strong>N = 10</strong> (שמאל למעלה) כדי לראות את השרשראות בבירור. אחר כך עברו ל-N = 100 ולחצו ⚡ INSTANT לעשרות סיבובים — צפו כיצד שיעור ההצלחה מתכנס לכ-31.18%.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     § 3  כתיבת הקוד
+══════════════════════════════════════════ -->
+<div class="sec anchor" id="s3">
+  <div class="sec-hd">
+    <div class="sec-num">3</div>
+    <div class="sec-title">כתיבת הקוד — שלב אחרי שלב</div>
+  </div>
+
+  <div class="callout info" style="margin-bottom:16px">
+    <b>שפה:</b> Java &nbsp;|&nbsp; <b>ללא ספריות חיצוניות</b> — מערכים רגילים ולולאות בלבד.<br>
+    הפונקציה <code>generateUniqueRandomArray</code> ניתנת לכם מוכנה.
+  </div>
+
+  <!-- PROVIDED -->
+  <div class="step">
+    <div class="step-hd" onclick="toggleStep(this)">
+      <span class="step-tag given">PROVIDED</span>
+      <span class="step-name">generateUniqueRandomArray(int n)</span>
+      <span class="step-caret">▼</span>
+    </div>
+    <div class="step-body open">
+      <p>פונקציה זו ניתנת לכם. היא מחזירה מערך של <code>n</code> מספרים שלמים ייחודיים בין 0 ל-n−1, בסדר אקראי, בשיטת <strong>Fisher-Yates</strong>. אין צורך לשנות אותה — רק לקרוא לה.</p>
+<pre><span class="c-cmt">/**
+ * מחזירה מערך של n מספרים ייחודיים אקראיים בתחום [0, n-1].
+ * שיטת Fisher-Yates — O(n), התפלגות אחידה.
+ */</span>
+<span class="c-ret">static</span> <span class="c-type">int</span>[] <span class="c-fn">generateUniqueRandomArray</span>(<span class="c-type">int</span> n) {
+    <span class="c-kw">if</span> (n &lt; 0)
+        <span class="c-kw">throw new</span> <span class="c-type">IllegalArgumentException</span>(<span class="c-str">"n must be non-negative"</span>);
+
+    <span class="c-type">int</span>[] arr = <span class="c-kw">new</span> <span class="c-type">int</span>[n];
+    <span class="c-kw">for</span> (<span class="c-type">int</span> i = <span class="c-num">0</span>; i &lt; n; i++) arr[i] = i;
+
+    <span class="c-type">Random</span> rand = <span class="c-kw">new</span> <span class="c-type">Random</span>();
+    <span class="c-kw">for</span> (<span class="c-type">int</span> i = n - <span class="c-num">1</span>; i &gt; <span class="c-num">0</span>; i--) {
+        <span class="c-type">int</span> j = rand.nextInt(i + <span class="c-num">1</span>);
+        <span class="c-type">int</span> tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+    <span class="c-kw">return</span> arr;
+}</pre>
+    </div>
+  </div>
+
+  <!-- TASK 1 -->
+  <div class="step">
+    <div class="step-hd" onclick="toggleStep(this)">
+      <span class="step-tag todo">TASK 1</span>
+      <span class="step-name">serialSearchByValueChain(int[] arr, int startIndex)</span>
+      <span class="step-caret">▶</span>
+    </div>
+    <div class="step-body">
+      <p>זה <strong>לב האסטרטגיה</strong>. האסיר מתחיל בקופסה <code>startIndex</code>, קורא את הערך, קופץ לאותו אינדקס, וממשיך בשרשרת. ספרו כל קופסה שנפתחה.</p>
+      <p>החזירו את מספר הקופסאות שנפתחו עד מציאת המספר. החזירו <code>-1</code> אם מתגלה לולאה אינסופית (השתמשו ב-<code>boolean[]</code> כמגן).</p>
+
+      <div class="callout tip"><b>רמז:</b> הלולאה רצה לכל היותר <code>arr.length</code> פעמים. השתמשו ב-<code>currentIndex</code> למעקב אחרי המיקום ו-<code>searchCount</code> לספירה. תנאי המציאה: <code>arr[currentIndex] == startIndex</code>.</div>
+
+<pre><span class="c-cmt">/**
+ * עוקב אחרי שרשרת הערכים החל מ-startIndex.
+ * מחזיר את מספר הקופסאות שנפתחו עד מציאת startIndex,
+ * או -1 אם מתגלה מחזור (לא אמור לקרות עם פרמוטציה תקינה).
+ */</span>
+<span class="c-ret">static</span> <span class="c-type">int</span> <span class="c-fn">serialSearchByValueChain</span>(<span class="c-type">int</span>[] arr, <span class="c-type">int</span> startIndex) {
+
+    <span class="c-kw">if</span> (startIndex &lt; <span class="c-num">0</span> || startIndex &gt;= arr.length)
+        <span class="c-kw">throw new</span> <span class="c-type">IllegalArgumentException</span>(<span class="c-str">"startIndex out of bounds"</span>);
+
+    <span class="c-todo">// TODO: הכריזו על boolean[] לסימון קופסאות שביקרנו בהן (גודל = arr.length)</span>
+
+    <span class="c-type">int</span> currentIndex = startIndex;
+    <span class="c-type">int</span> searchCount  = <span class="c-num">0</span>;
+
+    <span class="c-kw">while</span> (<span class="c-kw">true</span>) {
+        <span class="c-todo">// TODO: הגדילו את searchCount ב-1</span>
+
+        <span class="c-todo">// TODO: בדקו אם currentIndex כבר בוקר — אם כן, החזירו -1</span>
+
+        <span class="c-todo">// TODO: סמנו את currentIndex כמבוקר</span>
+
+        <span class="c-todo">// TODO: אם arr[currentIndex] == startIndex — החזירו searchCount (נמצא!)</span>
+
+        <span class="c-todo">// TODO: אחרת — קדמו: currentIndex = arr[currentIndex]</span>
+    }
+}</pre>
+
+      <ul class="hints">
+        <li>מערך <code>boolean[]</code> מחליף <code>HashSet</code> — בדיקה ב-O(1) ללא ייבוא ספריות.</li>
+        <li>בפרמוטציה תקינה השרשרת <em>תמיד</em> חוזרת לנקודת ההתחלה — תנאי הסיום היחידים הם "נמצא" ו-"כבר ביקרנו".</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TASK 2 -->
+  <div class="step">
+    <div class="step-hd" onclick="toggleStep(this)">
+      <span class="step-tag todo">TASK 2</span>
+      <span class="step-name">testSerialSearchByValueChain(int n)</span>
+      <span class="step-caret">▶</span>
+    </div>
+    <div class="step-body">
+      <p>פונקציה זו מדמה <strong>סיבוב אחד שלם</strong>: יוצרת פרמוטציה אקראית אחת, ומריצה עליה את כל <code>n</code> האסירים. מחזירה <code>true</code> אם <em>כולם</em> מצאו את המספר שלהם בתוך <code>n/2</code> צעדים.</p>
+
+      <div class="callout tip"><b>רמז:</b> קראו ל-<code>generateUniqueRandomArray(n)</code> פעם אחת בלבד. ואז עברו בלולאה על כל ערכי <code>startIndex</code> מ-0 עד n−1. אם אסיר כלשהו עלה על <code>n/2</code>, החזירו <code>false</code> מיד.</div>
+
+<pre><span class="c-cmt">/**
+ * מריצה סיבוב שלם עם n אסירים.
+ * מחזירה true אם כולם הצליחו (שרשרת ≤ n/2), אחרת false.
+ */</span>
+<span class="c-ret">static</span> <span class="c-type">boolean</span> <span class="c-fn">testSerialSearchByValueChain</span>(<span class="c-type">int</span> n) {
+
+    <span class="c-todo">// TODO: צרו מערך אקראי בגודל n</span>
+
+    <span class="c-todo">// TODO: עברו בלולאה על כל האסירים (startIndex = 0 עד n-1)</span>
+    <span class="c-kw">for</span> ( <span class="c-todo">/* TODO */</span> ) {
+
+        <span class="c-todo">// TODO: קראו ל-serialSearchByValueChain עבור כל אסיר</span>
+
+        <span class="c-todo">// TODO: אם התוצאה גדולה מ-n/2 — החזירו false מיד</span>
+    }
+
+    <span class="c-kw">return</span> <span class="c-num">true</span>; <span class="c-cmt">// כולם הצליחו</span>
+}</pre>
+
+      <ul class="hints">
+        <li>השתמשו ב-<code>n / 2.0</code> (או המרה ל-double) כדי להימנע מבעיות חלוקה שלמה כש-n אי-זוגי.</li>
+        <li>יציאה מוקדמת מהלולאה עם <code>return false</code> היא גם נכונה וגם יעילה — אין צורך להמשיך לבדוק אחרי כישלון.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TASK 3 -->
+  <div class="step">
+    <div class="step-hd" onclick="toggleStep(this)">
+      <span class="step-tag todo">TASK 3</span>
+      <span class="step-name">main(String[] args)</span>
+      <span class="step-caret">▶</span>
+    </div>
+    <div class="step-body">
+      <p>הריצו <code>tests</code> סיבובים עצמאיים וספרו כמה פעמים כל האסירים שוחררו. הדפיסו את שיעור ההצלחה. הוא צריך להתכנס לכ-<strong>31.18%</strong>.</p>
+
+<pre><span class="c-ret">public static void</span> <span class="c-fn">main</span>(<span class="c-type">String</span>[] args) {
+
+    <span class="c-type">int</span> free      = <span class="c-num">0</span>;
+    <span class="c-type">int</span> prisoners = <span class="c-num">100</span>;
+    <span class="c-type">int</span> tests     = <span class="c-num">10000</span>;
+
+    <span class="c-todo">// TODO: לולאה של 'tests' פעמים</span>
+    <span class="c-kw">for</span> ( <span class="c-todo">/* TODO */</span> ) {
+
+        <span class="c-todo">// TODO: קראו ל-testSerialSearchByValueChain(prisoners)</span>
+        <span class="c-todo">// TODO: אם מחזירה true — הגדילו את free ב-1</span>
+    }
+
+    <span class="c-todo">// TODO: הדפיסו free / tests כמספר עשרוני (המירו ל-double)</span>
+    <span class="c-type">System</span>.out.println( <span class="c-todo">/* TODO */</span> );
+}</pre>
+
+      <ul class="hints">
+        <li>פלט צפוי: מספר קרוב ל-<code>0.3118</code> — יהיו שינויים קטנים בין הרצות בגלל האקראיות.</li>
+        <li>עם 10,000 ניסויים ו-100 אסירים התוצאה יציבה סטטיסטית (סטיית תקן ≈ 0.005).</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     § 4  בדיקה ויזואלית
+══════════════════════════════════════════ -->
+<div class="sec anchor" id="s4">
+  <div class="sec-hd">
+    <div class="sec-num">4</div>
+    <div class="sec-title">בדקו את הקוד שלכם ויזואלית</div>
+  </div>
+  <div id="tester">
+    <div class="tester-hd">
+      <h3>בודק Java ויזואלי</h3>
+      <span class="badge2">AI-POWERED</span>
+    </div>
+    <div class="tester-body">
+      <p style="font-size:.88rem;color:var(--t1);margin-bottom:14px">הדביקו את הפונקציה <code>serialSearchByValueChain</code> שכתבתם (או את כל הקלאס). בינה מלאכותית תתרגם אותה ל-JavaScript ותריץ את הסימולציה עם האלגוריתם שלכם — כך תוכלו לראות בעיניים אם המימוש נכון.</p>
+      <label class="lbl">קוד Java שלכם</label>
+      <textarea id="jcode" placeholder="static int serialSearchByValueChain(int[] arr, int startIndex) {
+    // your implementation here...
+}
+
+// ניתן להדביק את כל הקלאס — רק serialSearchByValueChain תשמש."></textarea>
+      <div id="jst"></div>
+      <div class="tester-btns">
+        <button class="tbtn pri" id="japply" onclick="applyJava()">⚡ תרגם והרץ</button>
+        <button class="tbtn sec" onclick="resetDef()">↺ אפס לברירת מחדל</button>
+        <span id="jmode" style="font-size:.75rem;font-family:'JetBrains Mono',monospace;color:var(--t2)">פועל עם: אלגוריתם ברירת מחדל</span>
+      </div>
+      <div id="sim2div">
+        <iframe id="sim2frame" title="Custom simulation"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     § 5  שאלות הרהור
+══════════════════════════════════════════ -->
+<div class="sec anchor" id="s5">
+  <div class="sec-hd">
+    <div class="sec-num">5</div>
+    <div class="sec-title">שאלות הרהור</div>
+  </div>
+
+  <!-- פרטי תלמיד -->
+  <div class="q-item" id="student-info" style="background:#f9f8f5;display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end">
+    <div style="flex:1;min-width:160px">
+      <label class="lbl" for="s-name">שם מלא</label>
+      <input id="s-name" type="text" placeholder="ישראל ישראלי"
+        style="width:100%;padding:8px 12px;border:1px solid var(--bd);border-radius:5px;font-family:'Heebo',sans-serif;font-size:.9rem;background:#fff;outline:none;color:var(--t0)"
+        oninput="onAnswerInput()">
+    </div>
+    <div style="flex:0 0 100px">
+      <label class="lbl" for="s-class">כיתה</label>
+      <input id="s-class" type="text" placeholder="י׳1"
+        style="width:100%;padding:8px 12px;border:1px solid var(--bd);border-radius:5px;font-family:'Heebo',sans-serif;font-size:.9rem;background:#fff;outline:none;color:var(--t0)"
+        oninput="onAnswerInput()">
+    </div>
+    <div style="flex:1;min-width:180px">
+      <label class="lbl" for="s-email">כתובת מייל</label>
+      <input id="s-email" type="email" placeholder="student@school.edu"
+        style="width:100%;padding:8px 12px;border:1px solid var(--bd);border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:.82rem;background:#fff;outline:none;color:var(--t0);direction:ltr;text-align:left"
+        oninput="onAnswerInput()">
+    </div>
+  </div>
+
+  <!-- שאלה 1 -->
+  <div class="q-item">
+    <div class="q-num">שאלה 1</div>
+    <div class="q-text">מדוע אסטרטגיית השרשרת טובה כל-כך לעומת בחירה אקראית של קופסאות? הסבירו במונחים של <em>תלות</em> בין גורלות האסירים.</div>
+    <textarea class="q-area" id="qa1" placeholder="כתבו את תשובתכם כאן..."></textarea>
+    <div class="ans-toggle">
+      <button class="ans-toggle-btn" onclick="toggleAns(this)">💡 גלו תשובה</button>
+    </div>
+    <div class="ans-body">
+      <p><strong>הבעיה עם אסטרטגיה אקראית:</strong> אם כל אסיר בוחר 50 קופסאות באקראי, הסיכוי שלו להצליח הוא בדיוק 50%. אבל הגורלות של האסירים השונים <em>בלתי תלויים</em> זה בזה — כל אחד מטיל מטבע משלו. לכן ההסתברות שכולם יצליחו היא (½)¹⁰⁰ ≈ 0.</p>
+      <hr class="ans-sep">
+      <p><strong>למה השרשרת שונה:</strong> באסטרטגיית השרשרת, כל האסירים עוקבים אחרי <em>אותה פרמוטציה</em>. הגורל שלהם כבר נקבע ברגע ש-100 הפתקים הונחו — לפני שאסיר אחד נכנס לחדר. כולם אם מנצחים יחד (אף מחזור לא ארוך מ-50) או כולם מפסידים יחד (יש מחזור ארוך מ-50). הגורלות <em>תלויים</em> זה בזה באופן מלא, וזה מה שמאפשר לקבוצה להגיע ל-31%.</p>
+    </div>
+  </div>
+
+  <!-- שאלה 2 -->
+  <div class="q-item">
+    <div class="q-num">שאלה 2</div>
+    <div class="q-text">מה הקשר בין <em>מחזורים בפרמוטציה</em> לבין הצלחת הסיבוב? באיזה תנאי מדויק כל הקבוצה מנצחת?</div>
+    <textarea class="q-area" id="qa2" placeholder="כתבו את תשובתכם כאן..."></textarea>
+    <div class="ans-toggle">
+      <button class="ans-toggle-btn" onclick="toggleAns(this)">💡 גלו תשובה</button>
+    </div>
+    <div class="ans-body">
+      <p><strong>מה זה מחזור:</strong> כל פרמוטציה מתפרקת למחזורים (<em>cycles</em>) נפרדים. מחזור הוא קבוצת קופסאות שמובילות זו לזו ואז חוזרות לנקודת ההתחלה. לדוגמה: קופסה 3 מכילה 7, קופסה 7 מכילה 1, קופסה 1 מכילה 3 — מחזור באורך 3.</p>
+      <hr class="ans-sep">
+      <p><strong>הקשר לאסטרטגיה:</strong> אסיר מספר <em>k</em> עוקב תמיד בדיוק על המחזור שמכיל את k. אורך המחזור הזה קובע כמה צעדים ייקחו לו — הוא יצליח אם ורק אם אורך המחזור ≤ 50.</p>
+      <hr class="ans-sep">
+      <p><strong>תנאי הניצחון:</strong> הקבוצה כולה מנצחת <em>אם ורק אם אף מחזור בפרמוטציה אינו ארוך מ-50</em>. אם יש אפילו מחזור אחד באורך 51 ומעלה, כל האסירים שנמצאים בו ייכשלו.</p>
+    </div>
+  </div>
+
+  <!-- שאלה 3 -->
+  <div class="q-item">
+    <div class="q-num">שאלה 3</div>
+    <div class="q-text">בסימולציה שלכם, מדוע התוצאה מתכנסת לכ-0.3118 ככל שמספר הניסויים גדל? איזה עיקרון מתמטי מסביר התכנסות זו?</div>
+    <textarea class="q-area" id="qa3" placeholder="כתבו את תשובתכם כאן..."></textarea>
+    <div class="ans-toggle">
+      <button class="ans-toggle-btn" onclick="toggleAns(this)">💡 גלו תשובה</button>
+    </div>
+    <div class="ans-body">
+      <p><strong>חוק המספרים הגדולים:</strong> ככל שמריצים יותר ניסויים בלתי תלויים, הממוצע המדגמי מתקרב לציפייה המתמטית האמיתית. זהו <em>חוק המספרים הגדולים</em> — עיקרון יסוד בתורת ההסתברות.</p>
+      <hr class="ans-sep">
+      <p><strong>מהיכן מגיע 31.18%:</strong> ניתן לחשב מתמטית שההסתברות שפרמוטציה אקראית של n איברים <em>לא תכיל מחזור ארוך מ-n/2</em> שווה בקירוב ל-1 − ln(2) ≈ 0.3068. ל-n = 100 הערך המדויק הוא ≈ 0.3118. הסימולציה מתקרבת למספר זה ככל שמספר הסיבובים גדל.</p>
+    </div>
+  </div>
+
+  <!-- בונוס -->
+  <div class="q-item">
+    <div class="q-num">בונוס</div>
+    <div class="q-text">מה היה קורה אם כל אסיר היה מתחיל בקופסה <em>אקראית</em> במקום בקופסה עם המספר שלו — אך עדיין ממשיך בשרשרת? האם שיעור ההצלחה היה משתנה? הסבירו.</div>
+    <textarea class="q-area" id="qa4" placeholder="כתבו את תשובתכם כאן..."></textarea>
+    <div class="ans-toggle">
+      <button class="ans-toggle-btn" onclick="toggleAns(this)">💡 גלו תשובה</button>
+    </div>
+    <div class="ans-body">
+      <p><strong>כן, שיעור ההצלחה ירד בחדות.</strong> הסיבה היא שהאסטרטגיה מסתמכת על כך שכל אסיר מתחיל <em>בדיוק</em> בקופסה שמספרה שלו. כך מובטח שהשרשרת שהוא עוקב אחריה היא בדיוק המחזור שמכיל את מספרו — ולכן אם המחזור קצר מספיק, הוא <em>בהכרח</em> יגיע אליו.</p>
+      <hr class="ans-sep">
+      <p>אם מתחילים בקופסה אקראית, אסיר עשוי לעקוב אחרי מחזור שכלל לא מכיל את המספר שלו — ולא יגיע אליו לעולם, גם אם המחזור שמכיל אותו קצר מ-50. ההסתברות שאסיר יצליח תחזור להיות 50% בלי תלות בין האסירים השונים — ושיעור ההצלחה הכולל יצנח בחזרה לכמעט אפס.</p>
+    </div>
+  </div>
+
+</div>
+
+  <!-- סרגל שמירה וייצוא -->
+  <div id="savebar">
+    <span id="savestatus">⏳ טרם נשמר</span>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="savebtn sec" onclick="clearAnswers()">🗑 נקה</button>
+      <button class="savebtn" onclick="exportCSV()">📊 ייצוא CSV לגוגל שיטס</button>
+      <button class="savebtn" onclick="exportPDF()">📄 ייצוא PDF</button>
+    </div>
+  </div>
+
+</div>
+</div><!-- /wrap -->
+
+<!-- ══════════════════════════════════════════
+     SIMULATION HTML (embedded)
+══════════════════════════════════════════ -->
+<script id="simSrc" type="text/plain">
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#03030e;--s1:#07071a;--s2:#0a0a1e;--bd:#14143a;--t0:#8888bb;--t1:#c0c0e0;--wh:#eeeeff;--cy:#00e5ff;--gn:#00ff88;--rd:#ff2255;--gl:#ffc800}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--t0);font-family:'Syne',sans-serif;display:flex;flex-direction:column}
+#hd{background:var(--s1);border-bottom:1px solid var(--bd);padding:5px 12px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+#logo{font-size:.95rem;font-weight:900;color:var(--wh);white-space:nowrap}
+#logo em{color:var(--cy);font-style:normal}
+.ndiv{display:flex;align-items:center;gap:4px}
+.nb{padding:2px 8px;border:1px solid var(--bd);background:transparent;color:var(--t0);font-family:'JetBrains Mono',monospace;font-size:.58rem;cursor:pointer;border-radius:3px;transition:all .1s}
+.nb:hover,.nb.on{border-color:var(--cy);color:var(--cy);background:rgba(0,229,255,.08)}
+.nl{font-size:.48rem;font-family:'JetBrains Mono',monospace;color:var(--bd)}
+.hstats{display:flex;gap:12px;margin-left:auto}
+.hst .hl{font-size:.4rem;text-transform:uppercase;letter-spacing:.1em;color:var(--bd);font-family:'JetBrains Mono',monospace}
+.hst .hv{font-size:.88rem;font-weight:700;font-family:'JetBrains Mono',monospace;line-height:1.1}
+#mn{flex:1;display:grid;grid-template-columns:1fr 260px;gap:1px;background:var(--bd);min-height:0;overflow:hidden}
+#lp{background:var(--bg);display:flex;flex-direction:column;padding:8px 10px;gap:6px;overflow:hidden;min-height:0}
+.ptl{font-size:.4rem;text-transform:uppercase;letter-spacing:.12em;color:var(--bd);font-family:'JetBrains Mono',monospace;flex-shrink:0}
+#bgrid{display:grid;gap:2px;flex:1;align-content:start;min-height:0}
+.bx{border-radius:3px;background:var(--s1);border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;aspect-ratio:1;transition:all .07s;position:relative}
+.bnum{font-size:.28rem;font-family:'JetBrains Mono',monospace;color:var(--bd);line-height:1}
+.bval{font-size:.6rem;font-weight:600;font-family:'JetBrains Mono',monospace;line-height:1.1}
+#pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(14px,1fr));gap:2px;flex-shrink:0}
+.pc{aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.02);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:.26rem;font-family:'JetBrains Mono',monospace;color:var(--bd);transition:all .1s}
+.pc.act{background:rgba(0,229,255,.14);border-color:var(--cy);color:var(--cy);box-shadow:0 0 4px rgba(0,229,255,.4)}
+.pc.suc{background:rgba(0,255,136,.1);border-color:rgba(0,255,136,.5);color:var(--gn)}
+.pc.fai{background:rgba(255,34,85,.1);border-color:rgba(255,34,85,.5);color:var(--rd)}
+#rp{background:var(--bd);display:flex;flex-direction:column;gap:1px;overflow:hidden}
+.rpnl{background:var(--s1);padding:8px 10px}
+.rpnl.grow{flex:1;min-height:0;display:flex;flex-direction:column}
+#info{font-size:.54rem;font-family:'JetBrains Mono',monospace;line-height:1.9;color:var(--t0);min-height:70px}
+#info .cy{color:var(--cy)}#info .gn{color:var(--gn)}#info .rd{color:var(--rd)}#info .gl{color:var(--gl)}#info .dm{color:var(--bd)}
+canvas{flex:1;display:block;width:100%;min-height:0}
+#ct{background:var(--s1);border-top:1px solid var(--bd);padding:5px 12px;display:flex;align-items:center;gap:7px;flex-shrink:0;flex-wrap:wrap}
+.spw{display:flex;align-items:center;gap:5px;flex:1;min-width:90px}
+.spl{font-size:.42rem;font-family:'JetBrains Mono',monospace;color:var(--bd)}
+input[type=range]{flex:1;-webkit-appearance:none;height:2px;background:var(--bd);outline:none;border-radius:1px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:9px;height:9px;border-radius:50%;background:var(--cy);cursor:pointer}
+.cb{padding:4px 10px;border:1px solid var(--bd);background:transparent;color:var(--t1);font-family:'Syne',sans-serif;font-size:.62rem;font-weight:700;cursor:pointer;border-radius:3px;transition:all .1s;white-space:nowrap}
+.cb:hover,.cb.on{border-color:var(--cy);color:var(--cy);background:rgba(0,229,255,.07)}
+.cb.dng:hover{border-color:var(--rd);color:var(--rd)}
+</style></head><body>
+<div id="hd">
+  <div id="logo">100&nbsp;<em>PRISONERS</em></div>
+  <div class="ndiv"><span class="nl">N=</span>
+    <button class="nb" data-n="10" onclick="setN(10)">10</button>
+    <button class="nb" data-n="20" onclick="setN(20)">20</button>
+    <button class="nb" data-n="50" onclick="setN(50)">50</button>
+    <button class="nb on" data-n="100" onclick="setN(100)">100</button>
+  </div>
+  <div class="hstats">
+    <div class="hst"><div class="hl">Round</div><div class="hv" id="hrd" style="color:var(--cy)">0</div></div>
+    <div class="hst"><div class="hl">Wins</div><div class="hv" id="hwn" style="color:var(--gn)">0</div></div>
+    <div class="hst"><div class="hl">Rate</div><div class="hv" id="hrt">—</div></div>
+    <div class="hst"><div class="hl">Theory</div><div class="hv" style="color:var(--bd)">31.18%</div></div>
+  </div>
+</div>
+<div id="mn">
+  <div id="lp">
+    <div class="ptl" id="btl">BOXES</div>
+    <div id="bgrid"></div>
+    <div class="ptl">PRISONERS</div>
+    <div id="pgrid"></div>
+  </div>
+  <div id="rp">
+    <div class="rpnl" style="flex-shrink:0"><div class="ptl">STATE</div><div id="info"><span class="dm">Press ▶ PLAY</span></div></div>
+    <div class="rpnl grow"><div class="ptl">SUCCESS RATE vs THEORY 31.18%</div><canvas id="cv"></canvas></div>
+  </div>
+</div>
+<div id="ct">
+  <div class="spw"><span class="spl">SLOW</span><input type="range" id="spd" min="1" max="100" value="30"><span class="spl">FAST</span></div>
+  <button class="cb on" id="bplay" onclick="togglePlay()">▶ PLAY</button>
+  <button class="cb" onclick="doStep()">STEP</button>
+  <button class="cb" onclick="doInstant()">⚡ INSTANT</button>
+  <button class="cb" onclick="doNewRound()">↺ NEW</button>
+  <button class="cb dng" onclick="doReset()">✕ RESET</button>
+</div>
+<script>
+var N=100,HALF=50,perm=[],cycInfo=[],longestCyc=0,round=0,wins=0,hist=[],playing=false,roundDone=true,betweenRounds=false,pIdx=0,chains=[],cStep=0,prevBox=-1,customFn=null,useCustom=false,animTimer=null;
+var SH=[180,155,200,130,220,165,240,145],DH=[0,20,345,10];
+function shuf(n){var a=[...Array(n).keys()];for(var i=n-1;i>0;i--){var j=0|Math.random()*(i+1);var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function buildCyc(p){var info=new Array(p.length),vis=new Set(),si=0,di=0,mx=0;for(var s=0;s<p.length;s++){if(vis.has(s))continue;var cyc=[],c=s;while(!vis.has(c)){vis.add(c);cyc.push(c);c=p[c];}var safe=cyc.length<=HALF,hue=safe?SH[si++%8]:DH[di++%4];cyc.forEach(function(b){info[b]={len:cyc.length,safe:safe,hue:hue};});if(cyc.length>mx)mx=cyc.length;}return{info:info,mx:mx};}
+function defSrch(arr,si){var half=Math.floor(arr.length/2),vis=[],cur=si;for(var s=0;s<half;s++){vis.push(cur);if(arr[cur]===si)return{visited:vis,success:true};cur=arr[cur];}return{visited:vis,success:false};}
+function runSrch(arr,si){if(useCustom&&customFn){try{return customFn(arr,si);}catch(e){return defSrch(arr,si);}}return defSrch(arr,si);}
+function buildBG(){var g=document.getElementById('bgrid');g.innerHTML='';var cols=Math.min(10,N);g.style.gridTemplateColumns='repeat('+cols+',1fr)';document.getElementById('btl').textContent='BOXES ('+N+')';for(var i=0;i<N;i++){var b=document.createElement('div');b.className='bx';b.id='bx'+i;b.innerHTML='<div class="bnum">'+i+'</div><div class="bval" id="bv'+i+'">?</div>';g.appendChild(b);}}
+function buildPG(){var g=document.getElementById('pgrid');g.innerHTML='';for(var i=0;i<N;i++){var p=document.createElement('div');p.className='pc';p.id='pc'+i;if(N<=20)p.textContent=i;g.appendChild(p);}}
+function rxC(i){var el=document.getElementById('bx'+i),v=document.getElementById('bv'+i),c=cycInfo[i],a=(0.03+(c.len/N)*0.08).toFixed(3);el.style.background='hsla('+c.hue+',68%,55%,'+a+')';el.style.borderColor='hsla('+c.hue+',68%,55%,'+(c.safe?0.18:0.42)+')';el.style.boxShadow='';el.style.transform='';v.style.color='hsla('+c.hue+',60%,55%,0.35)';v.textContent='?';}
+function rxV(i){var el=document.getElementById('bx'+i),v=document.getElementById('bv'+i);el.style.background='rgba(0,229,255,.07)';el.style.borderColor='rgba(0,229,255,.32)';el.style.boxShadow='';el.style.transform='';v.style.color='var(--cy)';v.textContent=perm[i];}
+function rxA(i){var el=document.getElementById('bx'+i),v=document.getElementById('bv'+i);el.style.background='rgba(0,229,255,.19)';el.style.borderColor='var(--cy)';el.style.transform='scale(1.1)';el.style.boxShadow='0 0 14px rgba(0,229,255,.7)';v.style.color='#fff';v.textContent=perm[i];}
+function rxR(i,ok){var el=document.getElementById('bx'+i),v=document.getElementById('bv'+i);el.style.transform='';el.style.boxShadow='';el.style.background=ok?'rgba(0,255,136,.07)':'rgba(255,34,85,.07)';el.style.borderColor=ok?'rgba(0,255,136,.38)':'rgba(255,34,85,.38)';v.style.color=ok?'var(--gn)':'var(--rd)';v.textContent=perm[i];}
+function sp(i,s){var e=document.getElementById('pc'+i);if(e)e.className='pc'+(s?' '+s:'');}
+function si2(h){document.getElementById('info').innerHTML=h;}
+function initRnd(){perm=shuf(N);var r=buildCyc(perm);cycInfo=r.info;longestCyc=r.mx;pIdx=0;cStep=0;prevBox=-1;roundDone=false;betweenRounds=false;chains=[];for(var i=0;i<N;i++)chains.push(runSrch(perm,i));for(var i=0;i<N;i++){rxC(i);sp(i,'');}sp(0,'act');var safe=longestCyc<=HALF;si2('<span class="cy">Round '+(round+1)+'</span><br>Longest cycle: <span class="'+(safe?'gn':'rd')+'">'+longestCyc+' '+(safe?'≤':'>')+' '+HALF+'</span><br><span class="'+(safe?'gn':'rd')+'">'+(safe?'✓ CAN succeed':'✗ WILL fail')+'</span>');}
+function adv(){if(pIdx>=N){endRnd();return;}var ch=chains[pIdx];if(cStep===ch.visited.length){if(prevBox!==-1)prevBox=-1;ch.visited.forEach(function(b){rxR(b,ch.success);});sp(pIdx,ch.success?'suc':'fai');pIdx++;cStep=0;if(pIdx>=N){endRnd();return;}sp(pIdx,'act');return;}if(prevBox!==-1)rxV(prevBox);var box=ch.visited[cStep];rxA(box);prevBox=box;var val=perm[box],found=(val===pIdx);var trail=ch.visited.slice(Math.max(0,cStep-3),cStep+1).join('→');si2('<span class="cy">P'+pIdx+'</span> step '+(cStep+1)+'/'+HALF+'<br>Box<span class="cy"> '+box+'</span>→<span class="'+(found?'gn':'cy')+'"> '+val+'</span>'+(found?' <span class="gn">FOUND ✓</span>':'')+' <br>'+trail+'<br>Cycle: <span class="'+(cycInfo[box].safe?'gn':'rd')+'">'+cycInfo[box].len+'</span>·Max:<span class="'+(longestCyc<=HALF?'gn':'rd')+'"> '+longestCyc+'</span>');cStep++;}
+function endRnd(){roundDone=true;prevBox=-1;round++;var won=chains.every(function(c){return c.success;});if(won)wins++;hist.push(won?1:0);if(hist.length>3000)hist.shift();document.getElementById('hrd').textContent=round;document.getElementById('hwn').textContent=wins;var rate=(wins/round*100).toFixed(1)+'%';var re=document.getElementById('hrt');re.textContent=rate;re.style.color=wins/round>=0.27?'var(--gn)':'var(--gl)';si2('<span class="'+(won?'gn':'rd')+'">'+(won?'✓ ALL FREED!':'✗ FAILED')+'</span><br>Longest: <span class="'+(longestCyc<=HALF?'gn':'rd')+'">'+longestCyc+'</span><br>Rate: <span class="'+(wins/round>=0.27?'gn':'gl')+'">'+rate+'</span> / 31.18%<br><span class="dm">'+(playing?'next round...':'Press ▶')+'</span>');drawChart();}
+function getDelay(){var v=+document.getElementById('spd').value;return Math.round(420*Math.pow(0.017,(v-1)/99));}
+function sched(d){clearTimeout(animTimer);if(!playing)return;animTimer=setTimeout(tick,d!==undefined?d:getDelay());}
+function tick(){if(!playing)return;if(betweenRounds){betweenRounds=false;initRnd();sched();return;}if(roundDone){betweenRounds=true;sched(700);return;}adv();sched();}
+function setPlayBtn(on){var b=document.getElementById('bplay');if(on){b.textContent='⏸ PAUSE';b.classList.add('on');}else{b.textContent='▶ PLAY';b.classList.remove('on');}}
+function togglePlay(){playing=!playing;clearTimeout(animTimer);setPlayBtn(playing);if(playing){if(roundDone&&!betweenRounds)initRnd();sched();}}
+function doStep(){if(playing){playing=false;clearTimeout(animTimer);setPlayBtn(false);}if(roundDone&&!betweenRounds)initRnd();if(!roundDone)adv();}
+function doInstant(){clearTimeout(animTimer);var wp=playing;playing=false;if(roundDone)initRnd();if(prevBox!==-1){rxV(prevBox);prevBox=-1;}for(var i=0;i<N;i++){chains[i].visited.forEach(function(b){rxR(b,chains[i].success);});sp(i,chains[i].success?'suc':'fai');}pIdx=N;endRnd();if(wp){playing=true;setPlayBtn(true);betweenRounds=true;sched(600);}}
+function doNewRound(){clearTimeout(animTimer);betweenRounds=false;initRnd();if(playing)sched();}
+function doReset(){clearTimeout(animTimer);playing=false;roundDone=true;betweenRounds=false;round=0;wins=0;hist=[];setPlayBtn(false);document.getElementById('hrd').textContent='0';document.getElementById('hwn').textContent='0';document.getElementById('hrt').textContent='—';document.getElementById('hrt').style.color='';initRnd();drawChart();}
+function setN(n){clearTimeout(animTimer);playing=false;roundDone=true;betweenRounds=false;round=0;wins=0;hist=[];N=n;HALF=n/2;setPlayBtn(false);document.getElementById('hrd').textContent='0';document.getElementById('hwn').textContent='0';document.getElementById('hrt').textContent='—';document.getElementById('hrt').style.color='';document.querySelectorAll('.nb').forEach(function(b){b.classList.toggle('on',+b.dataset.n===n);});buildBG();buildPG();initRnd();drawChart();}
+function drawChart(){var cv=document.getElementById('cv'),W=cv.offsetWidth,H=cv.offsetHeight;if(!W||!H)return;cv.width=W;cv.height=H;var ctx=cv.getContext('2d');ctx.fillStyle='#040410';ctx.fillRect(0,0,W,H);[[0.1,false],[0.2,false],[0.3118,true],[0.4,false],[0.5,false]].forEach(function(pair){var v=pair[0],isT=pair[1],y=H-v*H;ctx.strokeStyle=isT?'rgba(255,200,0,.22)':'rgba(255,255,255,.04)';ctx.lineWidth=isT?1.5:1;ctx.setLineDash(isT?[4,5]:[]);ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle=isT?'rgba(255,200,0,.8)':'rgba(255,255,255,.18)';ctx.font='8px JetBrains Mono,monospace';ctx.textAlign='right';ctx.fillText(isT?'31.18%':Math.round(v*100)+'%',W-3,y-2);});if(hist.length<2){ctx.fillStyle='rgba(255,255,255,.1)';ctx.font='9px JetBrains Mono,monospace';ctx.textAlign='center';ctx.fillText('play to generate data',W/2,H/2);return;}var bw=Math.max(1,W/hist.length);hist.forEach(function(w,i){var x=i*bw,bh=w?H*.04:H*.02;ctx.fillStyle=w?'rgba(0,255,136,.14)':'rgba(255,34,85,.1)';ctx.fillRect(x,H-bh,bw,bh);});var pts=hist.map(function(_,i){var wn=Math.min(50,i+1),sl=hist.slice(i-wn+1,i+1),avg=sl.reduce(function(a,b){return a+b;},0)/sl.length;return{x:(i/(hist.length-1||1))*W,y:H-avg*H};});var g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'rgba(0,255,136,.2)');g.addColorStop(1,'rgba(0,255,136,.01)');ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(pts[0].x,H);pts.forEach(function(p){ctx.lineTo(p.x,p.y);});ctx.lineTo(pts[pts.length-1].x,H);ctx.closePath();ctx.fill();ctx.strokeStyle='rgba(0,255,136,.88)';ctx.lineWidth=1.8;ctx.setLineDash([]);ctx.beginPath();pts.forEach(function(p,i){i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y);});ctx.stroke();var l=pts[pts.length-1];ctx.fillStyle='#00ff88';ctx.beginPath();ctx.arc(l.x,l.y,3.5,0,Math.PI*2);ctx.fill();if(round>0){ctx.fillStyle='rgba(0,255,136,.9)';ctx.font='bold 8px JetBrains Mono,monospace';ctx.textAlign='right';ctx.fillText((wins/round*100).toFixed(1)+'%',W-4,l.y-6);}}
+window.setCustomFn=function(fn){customFn=fn;useCustom=!!fn;};
+buildBG();buildPG();initRnd();drawChart();
+window.addEventListener('resize',drawChart);
+<\/script></body></html>
+</script>
+
+<script>
+// ── MINI DEMO ────────────────────────────────────────
+(function(){
+  const n=10;
+  let arr,step=0,prisoner=0,visitedBoxes=[],done=false;
+  function randPerm(n){const a=[...Array(n).keys()];for(let i=n-1;i>0;i--){const j=0|Math.random()*(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
+  function build(){const g=document.getElementById('mini-grid');g.innerHTML='';for(let i=0;i<n;i++){const b=document.createElement('div');b.className='mb';b.id='mb'+i;b.textContent=i;g.appendChild(b);}}
+  function show(i,st){const el=document.getElementById('mb'+i);if(!el)return;el.className='mb'+(st?' '+st:'');if(st&&st!=='')el.textContent=arr[i];else el.textContent=i;}
+  window.miniReset=function(){arr=randPerm(n);step=0;visitedBoxes=[];done=false;prisoner=0;for(let i=0;i<n;i++){const el=document.getElementById('mb'+i);el.className='mb';el.textContent=i;}document.getElementById('mini-msg').textContent='לחצו ▶ צעד — אסיר #'+prisoner+' עוקב אחרי השרשרת';};
+  window.miniStep=function(){
+    if(done){miniReset();return;}
+    if(step===0){visitedBoxes=[prisoner];show(prisoner,'active');document.getElementById('mini-msg').textContent='אסיר '+prisoner+' פותח קופסה '+prisoner+' → מוצא '+arr[prisoner];}
+    else{
+      const prev=visitedBoxes[visitedBoxes.length-1],val=arr[prev];
+      if(val===prisoner){show(prev,'found');visitedBoxes.forEach(b=>{if(b!==prev)show(b,'visited');});document.getElementById('mini-msg').textContent='✓ נמצא! אסיר '+prisoner+' מצא את המספר שלו ב-'+step+' צעדים.';prisoner=(prisoner+1)%n;done=step>=n/2||prisoner===0;step=0;visitedBoxes=[];return;}
+      else if(step>=n/2){show(prev,'fail');document.getElementById('mini-msg').textContent='✗ אסיר '+prisoner+' נכשל אחרי '+step+' צעדים!';done=true;return;}
+      visitedBoxes.push(val);show(prev,'visited');show(val,'active');document.getElementById('mini-msg').textContent='אסיר '+prisoner+' פותח קופסה '+val+' → מוצא '+arr[val];
+    }
+    step++;
+  };
+  build();miniReset();
+})();
+
+// ── ANSWER TOGGLE ────────────────────────────────────
+function toggleAns(btn){
+  const body=btn.closest('.q-item').querySelector('.ans-body');
+  const open=body.classList.toggle('open');
+  btn.classList.toggle('open',open);
+  btn.textContent=open?'🙈 הסתר תשובה':'💡 גלו תשובה';
+}
+
+// ── LOCAL STORAGE SAVE ────────────────────────────────
+const QA_IDS=['qa1','qa2','qa3','qa4'];
+const TEXT_IDS=['s-name','s-class','s-email',...QA_IDS];
+const STORE_KEY='prisoners_worksheet_answers';
+let saveTimer=null;
+
+function loadAnswers(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(STORE_KEY)||'{}');
+    TEXT_IDS.forEach(id=>{
+      const el=document.getElementById(id);
+      if(el&&saved[id]!==undefined) el.value=saved[id];
+    });
+    const ts=saved._ts;
+    if(ts){
+      const d=new Date(ts);
+      const fmt=d.toLocaleDateString('he-IL')+' '+d.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'});
+      setStatus('saved','✓ נשמר אוטומטית — '+fmt);
+    } else {
+      setStatus('','⏳ טרם נשמר');
+    }
+  }catch(e){}
+}
+
+function saveAnswers(){
+  try{
+    const data={_ts:Date.now()};
+    TEXT_IDS.forEach(id=>{
+      const el=document.getElementById(id);
+      if(el) data[id]=el.value;
+    });
+    localStorage.setItem(STORE_KEY,JSON.stringify(data));
+    const d=new Date();
+    setStatus('saved','✓ נשמר — '+d.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'}));
+  }catch(e){setStatus('','⚠ שגיאה בשמירה');}
+}
+
+function onAnswerInput(){
+  setStatus('dirty','✍ שינויים לא שמורים...');
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(saveAnswers,1200);
+}
+
+function clearAnswers(){
+  if(!confirm('למחוק את כל התשובות? פעולה זו אינה הפיכה.')) return;
+  TEXT_IDS.forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  localStorage.removeItem(STORE_KEY);
+  setStatus('','⏳ טרם נשמר');
+}
+
+function setStatus(cls,txt){
+  const el=document.getElementById('savestatus');
+  el.textContent=txt;
+  el.className=cls;
+}
+
+// ── CSV EXPORT ────────────────────────────────────────
+function exportCSV(){
+  saveAnswers();
+  const name  = (document.getElementById('s-name')?.value  ||'').trim() || 'ללא שם';
+  const klass = (document.getElementById('s-class')?.value ||'').trim() || '';
+  const email = (document.getElementById('s-email')?.value ||'').trim() || '';
+  const ts    = new Date().toLocaleString('he-IL');
+  const q1    = document.getElementById('qa1')?.value||'';
+  const q2    = document.getElementById('qa2')?.value||'';
+  const q3    = document.getElementById('qa3')?.value||'';
+  const q4    = document.getElementById('qa4')?.value||'';
+
+  function cell(s){ return '"'+String(s).replace(/"/g,'""')+'"'; }
+
+  const header = [cell('שם'),cell('כיתה'),cell('מייל'),cell('תאריך הגשה'),
+                  cell('שאלה 1'),cell('שאלה 2'),cell('שאלה 3'),cell('בונוס')].join(',');
+  const row    = [cell(name),cell(klass),cell(email),cell(ts),
+                  cell(q1),cell(q2),cell(q3),cell(q4)].join(',');
+
+  // BOM so Excel/Sheets reads Hebrew correctly
+  const bom  = '\uFEFF';
+  const blob = new Blob([bom+header+'\n'+row],{type:'text/csv;charset=utf-8'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'תשובות_'+name.replace(/\s+/g,'_')+'_'+klass+'.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportPDF(){
+  saveAnswers();
+  window.print();
+}
+
+// Attach listeners to all fields
+TEXT_IDS.forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('input',onAnswerInput);
+});
+
+// Load saved answers on start
+loadAnswers();
+
+// ── ACCORDION ────────────────────────────────────────
+function toggleStep(hd){
+  const body=hd.nextElementSibling,caret=hd.querySelector('.step-caret');
+  caret.textContent=body.classList.toggle('open')?'▼':'▶';
+}
+
+// ── SIM LOAD ─────────────────────────────────────────
+// <\/script> inside text/plain keeps its backslash in textContent,
+// which then breaks the srcdoc parser — strip the backslash here.
+function getSimHTML(){
+  return document.getElementById('simSrc').textContent.replace(/<\\\//g,'</');
+}
+function loadSim(){
+  document.getElementById('simframe').srcdoc=getSimHTML();
+  document.getElementById('simOverlay').classList.add('hide');
+}
+// Auto-load on page ready so §2 works without a click
+window.addEventListener('load', loadSim);
+
+// ── JAVA TESTER ──────────────────────────────────────
+function resetDef(){
+  document.getElementById('jst').textContent='';
+  document.getElementById('jmode').textContent='פועל עם: אלגוריתם ברירת מחדל';
+  document.getElementById('jmode').style.color='';
+  const f=document.getElementById('sim2frame');
+  if(f.srcdoc)f.contentWindow?.setCustomFn?.(null);
+}
+
+async function applyJava(){
+  const code=document.getElementById('jcode').value.trim();
+  if(!code){document.getElementById('jst').innerHTML='<span style="color:#cc2244">✗ הדביקו קוד Java תחילה</span>';return;}
+  const btn=document.getElementById('japply');
+  btn.disabled=true;
+  document.getElementById('jst').innerHTML='<span style="color:#b06000">⏳ מתרגם Java ל-JavaScript…</span>';
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',max_tokens:1200,
+      messages:[{role:'user',content:
+`Convert this Java prisoner search function to JavaScript.
+REQUIREMENTS:
+- Function signature MUST be exactly: function customSearch(arr, startIndex)
+- arr: JavaScript array of integers (0 to arr.length-1)
+- startIndex: integer 0..arr.length-1
+- Returns {visited: [array of box indices in order], success: boolean}
+- success = true if prisoner found their number within floor(arr.length/2) steps
+- Stop at floor(arr.length/2) steps max
+- Use boolean array guard against infinite loops
+Return ONLY this JSON (no markdown):
+{"fn":"function customSearch(arr,startIndex){ ... }"}
+Java:
+${code}`}]})});
+    const data=await resp.json();
+    const txt=data.content.find(b=>b.type==='text')?.text||'';
+    let fnStr;
+    try{const clean=txt.replace(/```[\w]*\n?|```\n?/g,'').trim();fnStr=JSON.parse(clean).fn;}
+    catch{const m=txt.match(/function\s+customSearch[\s\S]+?\n\s*\}/);if(m)fnStr=m[0];else throw new Error('לא ניתן לפרסר את התגובה');}
+    const fn=new Function('return ('+fnStr+')')();
+    const test=fn([1,2,0],0);
+    if(!Array.isArray(test?.visited)||typeof test?.success!=='boolean')throw new Error('הפונקציה החזירה פורמט שגוי');
+    document.getElementById('jst').innerHTML='<span style="color:#00875a">✓ הקוד תורגם בהצלחה! מריץ סימולציה עם האלגוריתם שלכם…</span>';
+    document.getElementById('jmode').textContent='פועל עם: האלגוריתם שלכם ✓';
+    document.getElementById('jmode').style.color='#00875a';
+    const div=document.getElementById('sim2div'),frame=document.getElementById('sim2frame');
+    div.classList.add('show');
+    if(!frame.srcdoc){frame.srcdoc=getSimHTML();frame.addEventListener('load',()=>{setTimeout(()=>frame.contentWindow?.setCustomFn?.(fn),200);},{once:true});}
+    else frame.contentWindow?.setCustomFn?.(fn);
+    div.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }catch(err){
+    document.getElementById('jst').innerHTML=`<span style="color:#cc2244">✗ ${err.message}</span>`;
+  }finally{btn.disabled=false;}
+}
+
+// ── PROGRESS BAR ─────────────────────────────────────
+window.addEventListener('scroll',()=>{
+  const pct=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  document.getElementById('pbar').style.width=Math.min(100,pct)+'%';
+});
+</script>
+</body>
+</html>
