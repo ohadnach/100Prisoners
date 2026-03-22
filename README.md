@@ -1,18 +1,78 @@
-## Getting Started
+# 100 Prisoners Problem
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+סימולציה ודף עבודה לבעיית 100 האסירים — בעיה קלאסית בתורת ההסתברות.
 
-## Folder Structure
+## 🔗 קישורים מהירים
 
-The workspace contains two folders by default, where:
+| | קישור |
+|---|---|
+| 🎮 סימולציה ויזואלית | https://ohadnach.github.io/100Prisoners/simulation/ |
+| 📝 דף עבודה לתלמידים | https://ohadnach.github.io/100Prisoners/worksheet/ |
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+---
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+## 📁 מבנה הפרויקט
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+```
+100Prisoners/
+│
+├── src/                        ← קוד Java
+│   └── ...                     ← סימולציה של בעיית האסירים
+│                                  מריצה 10,000 סיבובים ומתכנסת
+│                                  לערך הסטטיסטי האופטימלי (~31.18%)
+│
+├── simulation/
+│   └── index.html              ← סימולציה ויזואלית אינטראקטיבית
+│
+├── worksheet/
+│   └── index.html              ← דף עבודה לתלמידים (Java, כיתה י׳)
+│
+├── lib/                        ← תלויות Java
+├── bin/                        ← קבצי קומפילציה (נוצר אוטומטית)
+└── README.md
+```
 
-## Dependency Management
+---
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+## 🗂️ תיאור הרכיבים
+
+### קוד Java — `src/`
+סימולציה של בעיית האסירים בשפת Java, ללא ספריות חיצוניות.  
+מממשת את אסטרטגיית השרשרת ומריצה 10,000 ניסויים עצמאיים.  
+הפלט — מספר עשרוני הקרוב ל-`0.3118` — מאמת את הפתרון התיאורטי.
+
+### סימולציה ויזואלית — `simulation/`
+דף HTML אינטראקטיבי שמדגים את אסטרטגיית השרשרת בצורה ויזואלית:
+- רשת קופסאות עם הדגשת מחזורים בצבעים
+- אנימציה צעד-אחר-צעד עם שליטה במהירות
+- גרף התכנסות שיעור ההצלחה לאורך זמן
+- תמיכה ב-N = 10 / 20 / 50 / 100 אסירים
+
+### דף עבודה — `worksheet/`
+דף עבודה מודרך לתלמידי כיתה י׳ הלומדים Java:
+- הסבר תיאורטי על הבעיה
+- הוראות שלב-אחר-שלב עם `TODO` לכתיבת שלוש פונקציות
+- סימולציה ויזואלית משולבת לבדיקת הקוד
+- שאלות הרהור עם תשובות מתקפלות
+- שמירה אוטומטית של תשובות + ייצוא CSV לגוגל שיטס
+
+---
+
+## 📚 משאבים נוספים
+
+- 🎥 [הסבר ב-Veritasium — The Prisoners Riddle](https://youtu.be/iSNsgj1OCLA?si=DwDkQxMRZfxqh6aL)
+- 🐍 [מימוש Python ב-Google Colab](https://colab.research.google.com/drive/1g5geZHV87gYCG_F3NphaxFcuePFPFsyw?usp=sharing)
+
+---
+
+## ⚙️ הרצה מקומית — Java
+
+```bash
+# קומפילציה
+javac -d bin src/*.java
+
+# הרצה
+java -cp bin Main
+```
+
+> פלט צפוי: מספר קרוב ל-`0.3118`
