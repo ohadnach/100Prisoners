@@ -8,6 +8,7 @@
 |---|---|
 | 🎮 סימולציה ויזואלית | https://ohadnach.github.io/100Prisoners/simulation/ |
 | 📝 דף עבודה לתלמידים | https://ohadnach.github.io/100Prisoners/worksheet/ |
+| ⚙️  המרת שפות מג'אווה לסקריפט | https://ohadnach.github.io/100Prisoners/java2js/ |
 
 ---
 
@@ -26,6 +27,9 @@
 │
 ├── worksheet/
 │   └── index.html              ← דף עבודה לתלמידים (Java, כיתה י׳)
+│
+├── java2js/
+│   └── index.html              ← אפליקצייה להמרת קוד בין השפות
 │
 ├── lib/                        ← תלויות Java
 ├── bin/                        ← קבצי קומפילציה (נוצר אוטומטית)
@@ -48,6 +52,12 @@
 - גרף התכנסות שיעור ההצלחה לאורך זמן
 - תמיכה ב-N = 10 / 20 / 50 / 100 אסירים
 
+### סימולציה ויזואלית — `java2js/`
+דף HTML אינטראקטיבי שממיר קוד מג'אווה לשפה הדרושה לסימולציה:
+- יש להדביק את קוד הפעולה בג'אווה בפאנל המתאים
+- ללחוץ על תרגום
+- להעתיק ולהדביק את הקוד במקום הדרוש בסימולציה על מנת לבדוק את נכונותו
+
 ### דף עבודה — `worksheet/`
 דף עבודה מודרך לתלמידי כיתה י׳ הלומדים Java:
 - הסבר תיאורטי על הבעיה
@@ -62,6 +72,7 @@
 
 - 🎥 [הסבר ב-Veritasium — The Prisoners Riddle](https://youtu.be/iSNsgj1OCLA?si=DwDkQxMRZfxqh6aL)
 - 🐍 [מימוש Python ב-Google Colab](https://colab.research.google.com/drive/1g5geZHV87gYCG_F3NphaxFcuePFPFsyw?usp=sharing)
+- ⚙️ [אתר הממיר קוד בין שפות שונות](https://www.codeconvert.ai/java-to-javascript-converter)
 
 ---
 

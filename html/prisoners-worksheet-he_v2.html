@@ -536,70 +536,20 @@ label.lbl{display:block;font-size:.75rem;font-weight:700;color:var(--t2);margin-
   </div>
   <div id="tester">
     <div class="tester-hd">
-      <h3>בודק ויזואלי — JavaScript</h3>
-      <span class="badge2">ללא צורך ב-API</span>
+      <h3>בודק Java ויזואלי</h3>
+      <span class="badge2">AI-POWERED</span>
     </div>
     <div class="tester-body">
+      <p style="font-size:.88rem;color:var(--t1);margin-bottom:14px">הדביקו את הפונקציה <code>serialSearchByValueChain</code> שכתבתם (או את כל הקלאס). בינה מלאכותית תתרגם אותה ל-JavaScript ותריץ את הסימולציה עם האלגוריתם שלכם — כך תוכלו לראות בעיניים אם המימוש נכון.</p>
+      <label class="lbl">קוד Java שלכם</label>
+      <textarea id="jcode" placeholder="static int serialSearchByValueChain(int[] arr, int startIndex) {
+    // your implementation here...
+}
 
-      <!-- מדריך המרה -->
-      <details style="margin-bottom:14px">
-        <summary style="cursor:pointer;font-size:.82rem;font-weight:700;color:var(--cy);padding:6px 0;list-style:none;display:flex;align-items:center;gap:6px">
-          <span>📋</span> איך להמיר את קוד ה-Java ל-JavaScript? (לחצו לפתיחה)
-        </summary>
-        <div style="margin-top:10px;padding:14px;background:#f9f8f5;border:1px solid var(--bd);border-radius:6px;font-size:.84rem">
-          <p style="margin-bottom:10px">ההמרה <strong>מכנית לחלוטין</strong> — כמעט שורה-אחר-שורה:</p>
-          <table style="width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:.76rem">
-            <tr style="background:#1a1814;color:#cdd4e0">
-              <th style="padding:6px 10px;text-align:right;border:1px solid #2d2b26;font-weight:600">Java</th>
-              <th style="padding:6px 10px;text-align:right;border:1px solid #2d2b26;font-weight:600">JavaScript</th>
-            </tr>
-            <tr style="background:#f0ede6"><td style="padding:5px 10px;border:1px solid var(--bd)"><code>this.boxes[i]</code></td><td style="padding:5px 10px;border:1px solid var(--bd)"><code>arr[i]</code></td></tr>
-            <tr><td style="padding:5px 10px;border:1px solid var(--bd)"><code>this.boxes.length</code></td><td style="padding:5px 10px;border:1px solid var(--bd)"><code>arr.length</code></td></tr>
-            <tr style="background:#f0ede6"><td style="padding:5px 10px;border:1px solid var(--bd)"><code>boolean[] visited = new boolean[n]</code></td><td style="padding:5px 10px;border:1px solid var(--bd)"><code>let visitedFlags = new Array(arr.length).fill(false)</code></td></tr>
-            <tr><td style="padding:5px 10px;border:1px solid var(--bd)"><code>int x = 0;</code></td><td style="padding:5px 10px;border:1px solid var(--bd)"><code>let x = 0;</code></td></tr>
-            <tr style="background:#f0ede6"><td style="padding:5px 10px;border:1px solid var(--bd)"><code>return searchCount;</code> (הצלחה)</td><td style="padding:5px 10px;border:1px solid var(--bd)"><code>return { visited: chain, success: true };</code></td></tr>
-            <tr><td style="padding:5px 10px;border:1px solid var(--bd)"><code>return -1;</code> (כישלון)</td><td style="padding:5px 10px;border:1px solid var(--bd)"><code>return { visited: chain, success: false };</code></td></tr>
-          </table>
-          <p style="margin-top:10px;color:var(--t2);font-size:.8rem">שימו לב: <code>chain</code> הוא מערך שמכיל את כל האינדקסים שנפתחו בסדר, הוסיפו לו <code>chain.push(currentIndex)</code> בכל צעד.</p>
-        </div>
-      </details>
-
-      <label class="lbl">קוד JavaScript — מלאו את הלוגיקה שלכם</label>
-      <textarea id="jcode" spellcheck="false">function customSearch(arr, startIndex) {
-  // arr         = מערך הקופסאות  (במקום this.boxes)
-  // startIndex  = מספר האסיר
-  // החזירו: { visited: [אינדקסים שנפתחו לפי הסדר], success: true/false }
-
-  const half = Math.floor(arr.length / 2);      // במקום this.prisonersNumber / 2
-  const visitedFlags = new Array(arr.length).fill(false);
-  const chain = [];                              // חדש: תיעוד לויזואליזציה
-
-  let currentIndex = startIndex;
-  let currentValue = arr[currentIndex];          // במקום this.boxes[currentIndex]
-  let searchCount = 0;
-
-  while (currentValue !== startIndex && searchCount <= half) {
-
-    if (currentIndex < 0 || currentIndex >= arr.length)
-      return { visited: chain, success: false }; // במקום: return -1
-
-    if (visitedFlags[currentIndex])
-      return { visited: chain, success: false }; // במקום: return -1
-
-    chain.push(currentIndex);                    // חדש: תיעוד כל קופסה
-    visitedFlags[currentIndex] = true;
-    currentValue = arr[currentIndex];            // במקום this.boxes[currentIndex]
-    currentIndex = currentValue;
-    searchCount++;
-  }
-
-  chain.push(currentIndex);                      // חדש: הקופסה האחרונה
-  const success = (currentValue === startIndex) && (searchCount <= half);
-  return { visited: chain, success };            // במקום: return searchCount
-}</textarea>
-      <div id="jst" style="min-height:20px;font-size:.8rem;font-family:'JetBrains Mono',monospace;margin:10px 0;color:var(--t2)"></div>
+// ניתן להדביק את כל הקלאס — רק serialSearchByValueChain תשמש."></textarea>
+      <div id="jst"></div>
       <div class="tester-btns">
-        <button class="tbtn pri" id="japply" onclick="applyJS()">▶ הרץ סימולציה</button>
+        <button class="tbtn pri" id="japply" onclick="applyJava()">⚡ תרגם והרץ</button>
         <button class="tbtn sec" onclick="resetDef()">↺ אפס לברירת מחדל</button>
         <span id="jmode" style="font-size:.75rem;font-family:'JetBrains Mono',monospace;color:var(--t2)">פועל עם: אלגוריתם ברירת מחדל</span>
       </div>
@@ -985,56 +935,87 @@ function loadSim(){
 // Auto-load on page ready so §2 works without a click
 window.addEventListener('load', loadSim);
 
-// ── JS TESTER (no API) ───────────────────────────────
+// ── JAVA TESTER ──────────────────────────────────────
 function resetDef(){
   document.getElementById('jst').textContent='';
   document.getElementById('jmode').textContent='פועל עם: אלגוריתם ברירת מחדל';
   document.getElementById('jmode').style.color='';
   const f=document.getElementById('sim2frame');
-  if(f.srcdoc) f.contentWindow?.setCustomFn?.(null);
+  if(f.srcdoc)f.contentWindow?.setCustomFn?.(null);
 }
 
-function applyJS(){
+async function applyJava(){
   const code=document.getElementById('jcode').value.trim();
-  if(!code){
-    document.getElementById('jst').innerHTML='<span style="color:#cc2244">✗ הכניסו קוד JavaScript תחילה</span>';
-    return;
-  }
+  if(!code){document.getElementById('jst').innerHTML='<span style="color:#cc2244">✗ הדביקו קוד Java תחילה</span>';return;}
+  const btn=document.getElementById('japply');
+  btn.disabled=true;
+  document.getElementById('jst').innerHTML='<span style="color:#b06000">⏳ מתרגם Java ל-JavaScript…</span>';
   try{
-    // Wrap in IIFE and extract the function
-    const fn = new Function('return (' + code + ')')();
-    if(typeof fn !== 'function')
-      throw new Error('הקוד צריך להכיל פונקציה בשם customSearch');
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',max_tokens:1500,
+      messages:[{role:'user',content:
+`You are translating a Java method from an OOP-style class called PrisonersProblem into a JavaScript wrapper function.
 
-    // Validate on [0,1,2,3]: prisoner 0 → arr[0]=0 = startIndex immediately → 1 step, success=true
-    const test = fn([0,1,2,3], 0);
-    if(!Array.isArray(test?.visited))
-      throw new Error('הפונקציה צריכה להחזיר { visited: [...], success: bool }');
-    if(typeof test?.success !== 'boolean')
-      throw new Error('שדה success חסר או אינו boolean');
-    if(test.visited.length === 0)
-      throw new Error('visited ריק — הוסיפו chain.push(currentIndex) בכל צעד');
-    if(!test.success)
-      throw new Error('הפונקציה החזירה success:false — בדקו שהלולאה מסתיימת כשמוצאים את startIndex');
+The Java class has:
+  - private int[] boxes;         (the permutation array)
+  - private int prisonersNumber; (array length)
 
-    document.getElementById('jst').innerHTML='<span style="color:#00875a">✓ הקוד תקין! מריץ סימולציה…</span>';
+The method being translated is serialSearchByValueChain(int startIndex).
+Inside the Java code, "this.boxes" refers to the permutation array and "this.prisonersNumber" refers to its length.
+
+YOUR TASK: produce a JavaScript function with EXACTLY this signature:
+  function customSearch(arr, startIndex)
+
+Where:
+- arr         = the boxes array (replaces this.boxes)
+- startIndex  = the prisoner's number (same as Java startIndex)
+- arr.length  = replaces this.prisonersNumber
+
+The function MUST return: { visited: [array of box indices opened, in order], success: boolean }
+- success = true if the prisoner found their number within floor(arr.length / 2) steps
+- visited = every box index opened along the chain, in order
+- Stop after floor(arr.length / 2) steps maximum
+- Use a boolean[] (JS boolean array) guard against infinite loops
+
+IMPORTANT translation rules:
+- Replace every "this.boxes[x]"       with "arr[x]"
+- Replace every "this.prisonersNumber" with "arr.length"
+- The function does NOT return searchCount — it returns {visited, success}
+- Track visited boxes in an array as you go
+- success is true only if arr[currentIndex] === startIndex was found within the step limit
+
+Return ONLY this JSON (no markdown, no explanation):
+{"fn":"function customSearch(arr,startIndex){ ... }"}
+
+Java method to translate:
+${code}`}]})});
+    const data=await resp.json();
+    const txt=data.content.find(b=>b.type==='text')?.text||'';
+    let fnStr;
+    try{const clean=txt.replace(/```[\w]*\n?|```\n?/g,'').trim();fnStr=JSON.parse(clean).fn;}
+    catch{const m=txt.match(/function\s+customSearch[\s\S]+?\}\s*$/m);if(m)fnStr=m[0];else throw new Error('לא ניתן לפרסר את התגובה מהבינה המלאכותית');}
+    const fn=new Function('return ('+fnStr+')')();
+    // Validate: run on a simple known permutation [1,2,0] — prisoner 0 should find chain 0→1→2→0 in 3 steps
+    const test=fn([1,2,0],0);
+    if(!Array.isArray(test?.visited)||typeof test?.success!=='boolean')
+      throw new Error('הפונקציה החזירה פורמט שגוי — צפוי {visited:[...], success:bool}');
+    if(test.visited.length===0)
+      throw new Error('visited array ריק — בדקו שהפונקציה מוסיפה כל קופסה שנפתחת');
+    document.getElementById('jst').innerHTML='<span style="color:#00875a">✓ הקוד תורגם בהצלחה! מריץ סימולציה עם האלגוריתם שלכם…</span>';
     document.getElementById('jmode').textContent='פועל עם: האלגוריתם שלכם ✓';
     document.getElementById('jmode').style.color='#00875a';
-
-    const div=document.getElementById('sim2div'), frame=document.getElementById('sim2frame');
+    const div=document.getElementById('sim2div'),frame=document.getElementById('sim2frame');
     div.classList.add('show');
-    if(!frame.srcdoc){
-      frame.srcdoc=getSimHTML();
-      frame.addEventListener('load',()=>{ setTimeout(()=>frame.contentWindow?.setCustomFn?.(fn),200); },{once:true});
-    } else {
-      frame.contentWindow?.setCustomFn?.(fn);
-    }
+    if(!frame.srcdoc){frame.srcdoc=getSimHTML();frame.addEventListener('load',()=>{setTimeout(()=>frame.contentWindow?.setCustomFn?.(fn),200);},{once:true});}
+    else frame.contentWindow?.setCustomFn?.(fn);
     div.scrollIntoView({behavior:'smooth',block:'nearest'});
-
   }catch(err){
-    document.getElementById('jst').innerHTML=`<span style="color:#cc2244">✗ שגיאה: ${err.message}</span>`;
+    const msg = (err.message||'').toLowerCase().includes('fetch')
+      ? 'תכונת התרגום עובדת רק מתוך הפלטפורמה של Claude (claude.ai). כשמורידים את הקובץ אין גישה ל-API — פתחו את דף העבודה ישירות מ-claude.ai כדי להשתמש בתרגום.'
+      : err.message;
+    document.getElementById('jst').innerHTML=`<span style="color:#cc2244">✗ ${msg}</span>`;
     console.error(err);
-  }
+  }finally{btn.disabled=false;}
 }
 
 // ── PROGRESS BAR ─────────────────────────────────────

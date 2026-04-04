@@ -71,7 +71,7 @@ strong{color:var(--t0)}
 .mini-btn:hover{border-color:var(--cy);color:var(--cy)}
 
 /* ── BIG SIM ── */
-#simdiv{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);background:#03030e;height:560px;position:relative}
+#simdiv{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);background:#03030e;height:420px;position:relative}
 #simframe{width:100%;height:100%;border:none;display:block}
 .sim-overlay{position:absolute;inset:0;background:rgba(3,3,14,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .3s}
 .sim-overlay.hide{opacity:0;pointer-events:none}
@@ -127,7 +127,7 @@ label.lbl{display:block;font-size:.75rem;font-weight:700;color:var(--t2);margin-
 .tbtn.sec{background:#f3f2ee;color:var(--t0);border:1px solid var(--bd2)}
 .tbtn.sec:hover{border-color:var(--t0)}
 .tbtn:disabled{opacity:.4;cursor:not-allowed}
-#sim2div{margin-top:16px;border:1px solid var(--bd);border-radius:6px;overflow:hidden;height:560px;display:none}
+#sim2div{margin-top:16px;border:1px solid var(--bd);border-radius:6px;overflow:hidden;height:380px;display:none}
 #sim2div.show{display:block}
 #sim2frame{width:100%;height:100%;border:none;display:block}
 
@@ -230,13 +230,13 @@ label.lbl{display:block;font-size:.75rem;font-weight:700;color:var(--t2);margin-
     <div class="prob-compare">
       <div class="prob-box bad">
         <div class="pb-label">אסטרטגיה אקראית</div>
-        <div class="pb-val" style="direction:ltr">(1/2)^100</div>
+        <div class="pb-val">(½)¹⁰⁰</div>
         <div class="pb-sub">פחות מ-1 לטריליון<br>בלתי אפשרי למעשה</div>
       </div>
       <div class="prob-box good">
         <div class="pb-label">אסטרטגיית השרשרת</div>
-        <div class="pb-val" style="direction:ltr">≈ 31.18%</div>
-        <div class="pb-sub" style="direction:ltr">1 − ln(2) ≈ 0.3118<br><span style="direction:rtl;display:block">הסיכוי מפתיע לטובה!</span></div>
+        <div class="pb-val">≈ 31.18%</div>
+        <div class="pb-sub">1 − ln(2) ≈ 0.3118<br>הסיכוי מפתיע לטובה!</div>
       </div>
     </div>
 
@@ -256,58 +256,7 @@ label.lbl{display:block;font-size:.75rem;font-weight:700;color:var(--t2);margin-
       </div>
     </div>
 
-    <div class="callout tip"><b>למה זה עובד?</b> כל האסירים עוקבים אחרי שרשראות מאותה פרמוטציה — הגורלות שלהם <em>תלויים</em> זה בזה. ההסתברות שאף מחזור לא יעלה על 50 שווה בדיוק <span style="direction:ltr;display:inline-block">1 − ln(2) ≈ 31.18%</span>.</div>
-
-    <!-- הסבר מתמטי -->
-    <details style="margin-top:16px">
-      <summary style="cursor:pointer;font-size:.88rem;font-weight:700;color:var(--pr);padding:8px 0;list-style:none;display:flex;align-items:center;gap:8px">
-        <span>🔢</span> מאיפה מגיע 31.18%? — ההסבר המתמטי
-      </summary>
-      <div style="margin-top:12px;padding:16px;background:var(--pr-l);border:1px solid rgba(102,51,204,.2);border-radius:6px;font-size:.87rem;color:#3d1a7a;line-height:1.85">
-
-        <p><strong>שאלה:</strong> מה ההסתברות שבפרמוטציה אקראית של n איברים, <em>אף מחזור לא יהיה ארוך מ-n/2</em>?</p>
-
-        <p><strong>שלב 1 — חישוב ההסתברות הכישלון:</strong><br>
-        נשאל: מה ההסתברות שקיים מחזור באורך <span style="direction:ltr;display:inline-block">k > n/2</span>?<br>
-        בפרמוטציה של n איברים, יכול להיות <em>לכל היותר מחזור אחד</em> כזה (כי שניים כבר יחד יעלו על n).<br>
-        ניתן להוכיח שההסתברות לקיום מחזור באורך בדיוק k שווה:</p>
-
-        <div style="direction:ltr;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.9rem;padding:10px;background:rgba(102,51,204,.07);border-radius:4px;margin:8px 0">
-          P(cycle of length k) = 1/k
-        </div>
-
-        <p><strong>שלב 2 — חיבור כל הכישלונות:</strong><br>
-        מאחר שאלו אירועים זרים (לא יכולים להתרחש בו-זמנית), ההסתברות לכישלון היא:</p>
-
-        <div style="direction:ltr;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.88rem;padding:10px;background:rgba(102,51,204,.07);border-radius:4px;margin:8px 0;line-height:2">
-          P(fail) = &sum;(k = n/2+1 to n) 1/k<br>
-                  = 1/(n/2+1) + 1/(n/2+2) + ... + 1/n
-        </div>
-
-        <p><strong>שלב 3 — קירוב לוגריתמי:</strong><br>
-        הסכום הזה מזכיר את הגדרת האינטגרל. עבור n גדול:</p>
-
-        <div style="direction:ltr;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.88rem;padding:10px;background:rgba(102,51,204,.07);border-radius:4px;margin:8px 0;line-height:2">
-          P(fail) ≈ &int;(n/2 to n) 1/x dx = ln(n) − ln(n/2) = ln(2) ≈ 0.6931
-        </div>
-
-        <p><strong>שלב 4 — ההסתברות להצלחה:</strong></p>
-
-        <div style="direction:ltr;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.95rem;padding:12px;background:rgba(102,51,204,.12);border-radius:4px;margin:8px 0;font-weight:700">
-          P(success) = 1 − ln(2) ≈ 1 − 0.6931 = 0.3069
-        </div>
-
-        <p><strong>מדוע 0.3118 ולא 0.3069?</strong><br>
-        הקירוב האינטגרלי מניח n→∞. עבור <span style="direction:ltr;display:inline-block">n = 100</span> בדיוק, חישוב מדויק של הסכום נותן:</p>
-
-        <div style="direction:ltr;text-align:center;font-family:'JetBrains Mono',monospace;font-size:.88rem;padding:10px;background:rgba(102,51,204,.07);border-radius:4px;margin:8px 0;line-height:2">
-          P(fail, n=100) = 1/51 + 1/52 + ... + 1/100 ≈ 0.6882<br>
-          P(success, n=100) = 1 − 0.6882 ≈ 0.3118
-        </div>
-
-        <p style="margin-top:10px;opacity:.75;font-size:.82rem">הסימולציה מתכנסת בדיוק לערך זה ככל שמספר הניסויים גדל — מה שמאמת הן את האסטרטגיה והן את המתמטיקה.</p>
-      </div>
-    </details>
+    <div class="callout tip"><b>למה זה עובד?</b> כל האסירים עוקבים אחרי שרשראות מאותה פרמוטציה — הגורלות שלהם <em>תלויים</em> זה בזה. ההסתברות שאף מחזור לא יעלה על 50 שווה בדיוק 1 − ln(2) ≈ 31.18%.</div>
   </div>
 </div>
 
@@ -342,73 +291,36 @@ label.lbl{display:block;font-size:.75rem;font-weight:700;color:var(--t2);margin-
   </div>
 
   <div class="callout info" style="margin-bottom:16px">
-    <b>שפה:</b> Java &nbsp;|&nbsp; <b>ללא ספריות חיצוניות</b> — מערכים ולולאות בלבד.<br>
-    הקוד מאורגן כ<b>מחלקה</b> (<em>class</em>) בשם <code>PrisonersProblem</code> וקובץ <code>App.java</code> נפרד עם <code>main</code>.
-  </div>
-
-  <!-- מבנה המחלקה -->
-  <div class="card" style="margin-bottom:16px">
-    <div class="ptl" style="margin-bottom:12px">מבנה המחלקה — <code>PrisonersProblem.java</code></div>
-    <p>המחלקה מכילה <strong>שתי תכונות (<em>fields</em>)</strong> פרטיות, פעולה בונה אחת, ושלוש פעולות שתממשו:</p>
-<pre><span class="c-ret">public class</span> <span class="c-type">PrisonersProblem</span> {
-
-    <span class="c-cmt">// ── תכונות המחלקה ──────────────────────────────────────</span>
-    <span class="c-kw">private</span> <span class="c-type">int</span>   prisonersNumber;   <span class="c-cmt">// מספר האסירים / גודל המערך</span>
-    <span class="c-kw">private</span> <span class="c-type">int</span>[] boxes;            <span class="c-cmt">// מערך הקופסאות (הפרמוטציה)</span>
-
-    <span class="c-cmt">// ── פעולה בונה ─────────────────────────────────────────</span>
-    <span class="c-ret">public</span> <span class="c-fn">PrisonersProblem</span>(<span class="c-type">int</span> prisonersNumber) { <span class="c-cmt">/* TASK 0 */</span> }
-
-    <span class="c-cmt">// ── פעולות ─────────────────────────────────────────────</span>
-    <span class="c-ret">public void</span>    <span class="c-fn">generateUniqueRandomArray</span>()               { <span class="c-cmt">/* PROVIDED */</span> }
-    <span class="c-ret">public</span> <span class="c-type">int</span>     <span class="c-fn">serialSearchByValueChain</span>(<span class="c-type">int</span> startIndex)  { <span class="c-cmt">/* TASK 1  */</span> }
-    <span class="c-ret">public</span> <span class="c-type">boolean</span> <span class="c-fn">testSerialSearchByValueChain</span>()             { <span class="c-cmt">/* TASK 2  */</span> }
-}</pre>
-    <p style="margin-top:10px">שימו לב: הפעולות <strong>אינן מקבלות את המערך כפרמטר</strong> — הן עובדות ישירות על <code>this.boxes</code> ועל <code>this.prisonersNumber</code>.</p>
-  </div>
-
-  <!-- TASK 0 — Constructor -->
-  <div class="step">
-    <div class="step-hd" onclick="toggleStep(this)">
-      <span class="step-tag todo">TASK 0</span>
-      <span class="step-name">Constructor — PrisonersProblem(int prisonersNumber)</span>
-      <span class="step-caret">▶</span>
-    </div>
-    <div class="step-body">
-      <p>הפעולה הבונה (<em>constructor</em>) נקראת אוטומטית כשיוצרים עצם חדש. תפקידה לאתחל את התכונות של העצם.</p>
-      <div class="callout tip"><b>רמז:</b> הפעולה הבונה מקבלת את <code>prisonersNumber</code> כפרמטר. שמרו אותו ב-<code>this.prisonersNumber</code>, ואתחלו את <code>this.boxes</code> כמערך ריק בגודל המתאים.</div>
-<pre><span class="c-ret">public</span> <span class="c-fn">PrisonersProblem</span>(<span class="c-type">int</span> prisonersNumber) {
-    <span class="c-todo">// TODO: שמרו את prisonersNumber בתכונה המתאימה</span>
-
-    <span class="c-todo">// TODO: צרו מערך int[] חדש בגודל prisonersNumber ושמרו ב-this.boxes</span>
-}</pre>
-      <ul class="hints">
-        <li>ב-Java, <code>this.boxes = new int[prisonersNumber]</code> יוצר מערך ומאתחל את כל תאיו ל-0.</li>
-        <li>לאחר קריאה לפעולה הבונה, ה-<code>boxes</code> עדיין ריק — הוא ימולא על-ידי <code>generateUniqueRandomArray()</code>.</li>
-      </ul>
-    </div>
+    <b>שפה:</b> Java &nbsp;|&nbsp; <b>ללא ספריות חיצוניות</b> — מערכים רגילים ולולאות בלבד.<br>
+    הפונקציה <code>generateUniqueRandomArray</code> ניתנת לכם מוכנה.
   </div>
 
   <!-- PROVIDED -->
   <div class="step">
     <div class="step-hd" onclick="toggleStep(this)">
       <span class="step-tag given">PROVIDED</span>
-      <span class="step-name">generateUniqueRandomArray()</span>
+      <span class="step-name">generateUniqueRandomArray(int n)</span>
       <span class="step-caret">▼</span>
     </div>
     <div class="step-body open">
-      <p>פעולה זו ניתנת לכם מוכנה. היא מעדכנת את <code>this.boxes</code> בפרמוטציה אקראית של המספרים <span style="direction:ltr;display:inline-block">0 עד prisonersNumber−1</span> בשיטת <strong>Fisher-Yates</strong> — O(n), התפלגות אחידה.</p>
-<pre><span class="c-ret">public void</span> <span class="c-fn">generateUniqueRandomArray</span>() {
-    <span class="c-kw">for</span> (<span class="c-type">int</span> i = <span class="c-num">0</span>; i &lt; <span class="c-kw">this</span>.prisonersNumber; i++)
-        <span class="c-kw">this</span>.boxes[i] = i;
+      <p>פונקציה זו ניתנת לכם. היא מחזירה מערך של <code>n</code> מספרים שלמים ייחודיים בין 0 ל-n−1, בסדר אקראי, בשיטת <strong>Fisher-Yates</strong>. אין צורך לשנות אותה — רק לקרוא לה.</p>
+<pre><span class="c-cmt">/**
+ * מחזירה מערך של n מספרים ייחודיים אקראיים בתחום [0, n-1].
+ * שיטת Fisher-Yates — O(n), התפלגות אחידה.
+ */</span>
+<span class="c-ret">static</span> <span class="c-type">int</span>[] <span class="c-fn">generateUniqueRandomArray</span>(<span class="c-type">int</span> n) {
+    <span class="c-kw">if</span> (n &lt; 0)
+        <span class="c-kw">throw new</span> <span class="c-type">IllegalArgumentException</span>(<span class="c-str">"n must be non-negative"</span>);
+
+    <span class="c-type">int</span>[] arr = <span class="c-kw">new</span> <span class="c-type">int</span>[n];
+    <span class="c-kw">for</span> (<span class="c-type">int</span> i = <span class="c-num">0</span>; i &lt; n; i++) arr[i] = i;
 
     <span class="c-type">Random</span> rand = <span class="c-kw">new</span> <span class="c-type">Random</span>();
-    <span class="c-kw">for</span> (<span class="c-type">int</span> i = <span class="c-kw">this</span>.prisonersNumber - <span class="c-num">1</span>; i &gt; <span class="c-num">0</span>; i--) {
-        <span class="c-type">int</span> j    = rand.nextInt(i + <span class="c-num">1</span>);
-        <span class="c-type">int</span> tmp  = <span class="c-kw">this</span>.boxes[i];
-        <span class="c-kw">this</span>.boxes[i] = <span class="c-kw">this</span>.boxes[j];
-        <span class="c-kw">this</span>.boxes[j] = tmp;
+    <span class="c-kw">for</span> (<span class="c-type">int</span> i = n - <span class="c-num">1</span>; i &gt; <span class="c-num">0</span>; i--) {
+        <span class="c-type">int</span> j = rand.nextInt(i + <span class="c-num">1</span>);
+        <span class="c-type">int</span> tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
     }
+    <span class="c-kw">return</span> arr;
 }</pre>
     </div>
   </div>
@@ -417,21 +329,26 @@ label.lbl{display:block;font-size:.75rem;font-weight:700;color:var(--t2);margin-
   <div class="step">
     <div class="step-hd" onclick="toggleStep(this)">
       <span class="step-tag todo">TASK 1</span>
-      <span class="step-name">serialSearchByValueChain(int startIndex)</span>
+      <span class="step-name">serialSearchByValueChain(int[] arr, int startIndex)</span>
       <span class="step-caret">▶</span>
     </div>
     <div class="step-body">
-      <p>זה <strong>לב האסטרטגיה</strong>. האסיר מתחיל בקופסה <code>startIndex</code>, קורא את הערך מתוך <code>this.boxes</code>, קופץ לאותו אינדקס, וממשיך בשרשרת. ספרו כל קופסה שנפתחה.</p>
-      <p>החזירו את מספר הקופסאות שנפתחו עד מציאת המספר. החזירו <code>-1</code> אם מתגלה לולאה אינסופית.</p>
+      <p>זה <strong>לב האסטרטגיה</strong>. האסיר מתחיל בקופסה <code>startIndex</code>, קורא את הערך, קופץ לאותו אינדקס, וממשיך בשרשרת. ספרו כל קופסה שנפתחה.</p>
+      <p>החזירו את מספר הקופסאות שנפתחו עד מציאת המספר. החזירו <code>-1</code> אם מתגלה לולאה אינסופית (השתמשו ב-<code>boolean[]</code> כמגן).</p>
 
-      <div class="callout tip"><b>רמז:</b> השתמשו ב-<code>this.boxes[currentIndex]</code> (לא <code>arr[...]</code>). תנאי המציאה: <code>this.boxes[currentIndex] == startIndex</code>. השתמשו ב-<code>boolean[]</code> בגודל <code>this.boxes.length</code> כמגן מפני לולאות.</div>
+      <div class="callout tip"><b>רמז:</b> הלולאה רצה לכל היותר <code>arr.length</code> פעמים. השתמשו ב-<code>currentIndex</code> למעקב אחרי המיקום ו-<code>searchCount</code> לספירה. תנאי המציאה: <code>arr[currentIndex] == startIndex</code>.</div>
 
-<pre><span class="c-ret">public</span> <span class="c-type">int</span> <span class="c-fn">serialSearchByValueChain</span>(<span class="c-type">int</span> startIndex) {
+<pre><span class="c-cmt">/**
+ * עוקב אחרי שרשרת הערכים החל מ-startIndex.
+ * מחזיר את מספר הקופסאות שנפתחו עד מציאת startIndex,
+ * או -1 אם מתגלה מחזור (לא אמור לקרות עם פרמוטציה תקינה).
+ */</span>
+<span class="c-ret">static</span> <span class="c-type">int</span> <span class="c-fn">serialSearchByValueChain</span>(<span class="c-type">int</span>[] arr, <span class="c-type">int</span> startIndex) {
 
-    <span class="c-kw">if</span> (startIndex &lt; <span class="c-num">0</span> || startIndex &gt;= <span class="c-kw">this</span>.boxes.length)
+    <span class="c-kw">if</span> (startIndex &lt; <span class="c-num">0</span> || startIndex &gt;= arr.length)
         <span class="c-kw">throw new</span> <span class="c-type">IllegalArgumentException</span>(<span class="c-str">"startIndex out of bounds"</span>);
 
-    <span class="c-todo">// TODO: הכריזו על boolean[] בגודל this.boxes.length</span>
+    <span class="c-todo">// TODO: הכריזו על boolean[] לסימון קופסאות שביקרנו בהן (גודל = arr.length)</span>
 
     <span class="c-type">int</span> currentIndex = startIndex;
     <span class="c-type">int</span> searchCount  = <span class="c-num">0</span>;
@@ -439,18 +356,19 @@ label.lbl{display:block;font-size:.75rem;font-weight:700;color:var(--t2);margin-
     <span class="c-kw">while</span> (<span class="c-kw">true</span>) {
         <span class="c-todo">// TODO: הגדילו את searchCount ב-1</span>
 
-        <span class="c-todo">// TODO: אם currentIndex כבר בוקר — החזירו -1</span>
+        <span class="c-todo">// TODO: בדקו אם currentIndex כבר בוקר — אם כן, החזירו -1</span>
 
         <span class="c-todo">// TODO: סמנו את currentIndex כמבוקר</span>
 
-        <span class="c-todo">// TODO: אם this.boxes[currentIndex] == startIndex — החזירו searchCount</span>
+        <span class="c-todo">// TODO: אם arr[currentIndex] == startIndex — החזירו searchCount (נמצא!)</span>
 
-        <span class="c-todo">// TODO: אחרת — currentIndex = this.boxes[currentIndex]</span>
+        <span class="c-todo">// TODO: אחרת — קדמו: currentIndex = arr[currentIndex]</span>
     }
 }</pre>
+
       <ul class="hints">
-        <li>ההבדל מהגרסה הפרוצדורלית: במקום <code>arr[i]</code> כותבים <code>this.boxes[i]</code>.</li>
         <li>מערך <code>boolean[]</code> מחליף <code>HashSet</code> — בדיקה ב-O(1) ללא ייבוא ספריות.</li>
+        <li>בפרמוטציה תקינה השרשרת <em>תמיד</em> חוזרת לנקודת ההתחלה — תנאי הסיום היחידים הם "נמצא" ו-"כבר ביקרנו".</li>
       </ul>
     </div>
   </div>
@@ -459,31 +377,36 @@ label.lbl{display:block;font-size:.75rem;font-weight:700;color:var(--t2);margin-
   <div class="step">
     <div class="step-hd" onclick="toggleStep(this)">
       <span class="step-tag todo">TASK 2</span>
-      <span class="step-name">testSerialSearchByValueChain()</span>
+      <span class="step-name">testSerialSearchByValueChain(int n)</span>
       <span class="step-caret">▶</span>
     </div>
     <div class="step-body">
-      <p>פעולה זו מדמה <strong>סיבוב אחד שלם</strong>: קוראת ל-<code>generateUniqueRandomArray()</code> כדי לערבב מחדש את <code>this.boxes</code>, ואז בודקת שכל <code>prisonersNumber</code> האסירים הצליחו בתוך <span style="direction:ltr;display:inline-block">prisonersNumber/2</span> צעדים.</p>
+      <p>פונקציה זו מדמה <strong>סיבוב אחד שלם</strong>: יוצרת פרמוטציה אקראית אחת, ומריצה עליה את כל <code>n</code> האסירים. מחזירה <code>true</code> אם <em>כולם</em> מצאו את המספר שלהם בתוך <code>n/2</code> צעדים.</p>
 
-      <div class="callout tip"><b>רמז:</b> לא צריך ליצור מערך חדש — פשוט קראו ל-<code>this.generateUniqueRandomArray()</code>. לאחר מכן עברו בלולאה על כל <code>startIndex</code> מ-0 עד <code>this.prisonersNumber - 1</code> וקראו ל-<code>this.serialSearchByValueChain(startIndex)</code>.</div>
+      <div class="callout tip"><b>רמז:</b> קראו ל-<code>generateUniqueRandomArray(n)</code> פעם אחת בלבד. ואז עברו בלולאה על כל ערכי <code>startIndex</code> מ-0 עד n−1. אם אסיר כלשהו עלה על <code>n/2</code>, החזירו <code>false</code> מיד.</div>
 
-<pre><span class="c-ret">public</span> <span class="c-type">boolean</span> <span class="c-fn">testSerialSearchByValueChain</span>() {
+<pre><span class="c-cmt">/**
+ * מריצה סיבוב שלם עם n אסירים.
+ * מחזירה true אם כולם הצליחו (שרשרת ≤ n/2), אחרת false.
+ */</span>
+<span class="c-ret">static</span> <span class="c-type">boolean</span> <span class="c-fn">testSerialSearchByValueChain</span>(<span class="c-type">int</span> n) {
 
-    <span class="c-todo">// TODO: קראו ל-this.generateUniqueRandomArray() לערבוב הקופסאות</span>
+    <span class="c-todo">// TODO: צרו מערך אקראי בגודל n</span>
 
-    <span class="c-todo">// TODO: עברו בלולאה על כל האסירים (startIndex = 0 עד prisonersNumber-1)</span>
+    <span class="c-todo">// TODO: עברו בלולאה על כל האסירים (startIndex = 0 עד n-1)</span>
     <span class="c-kw">for</span> ( <span class="c-todo">/* TODO */</span> ) {
 
-        <span class="c-todo">// TODO: קראו ל-this.serialSearchByValueChain(startIndex)</span>
+        <span class="c-todo">// TODO: קראו ל-serialSearchByValueChain עבור כל אסיר</span>
 
-        <span class="c-todo">// TODO: אם התוצאה == -1 או גדולה מ-prisonersNumber/2 — החזירו false</span>
+        <span class="c-todo">// TODO: אם התוצאה גדולה מ-n/2 — החזירו false מיד</span>
     }
 
     <span class="c-kw">return</span> <span class="c-num">true</span>; <span class="c-cmt">// כולם הצליחו</span>
 }</pre>
+
       <ul class="hints">
-        <li>השתמשו ב-<code>this.prisonersNumber / 2.0</code> כדי להימנע מבעיית חלוקה שלמה.</li>
-        <li>יציאה מוקדמת עם <code>return false</code> — נכונה ויעילה.</li>
+        <li>השתמשו ב-<code>n / 2.0</code> (או המרה ל-double) כדי להימנע מבעיות חלוקה שלמה כש-n אי-זוגי.</li>
+        <li>יציאה מוקדמת מהלולאה עם <code>return false</code> היא גם נכונה וגם יעילה — אין צורך להמשיך לבדוק אחרי כישלון.</li>
       </ul>
     </div>
   </div>
@@ -492,38 +415,35 @@ label.lbl{display:block;font-size:.75rem;font-weight:700;color:var(--t2);margin-
   <div class="step">
     <div class="step-hd" onclick="toggleStep(this)">
       <span class="step-tag todo">TASK 3</span>
-      <span class="step-name">main(String[] args) — App.java</span>
+      <span class="step-name">main(String[] args)</span>
       <span class="step-caret">▶</span>
     </div>
     <div class="step-body">
-      <p>בקובץ <code>App.java</code> נפרד: צרו <strong>עצם אחד</strong> מהמחלקה, והריצו עליו <code>tests</code> סיבובים. הפלט צריך להתכנס לכ-<strong>31.18%</strong>.</p>
+      <p>הריצו <code>tests</code> סיבובים עצמאיים וספרו כמה פעמים כל האסירים שוחררו. הדפיסו את שיעור ההצלחה. הוא צריך להתכנס לכ-<strong>31.18%</strong>.</p>
 
-<pre><span class="c-ret">public class</span> <span class="c-type">App</span> {
-    <span class="c-ret">public static void</span> <span class="c-fn">main</span>(<span class="c-type">String</span>[] args) {
+<pre><span class="c-ret">public static void</span> <span class="c-fn">main</span>(<span class="c-type">String</span>[] args) {
 
-        <span class="c-type">int</span> free  = <span class="c-num">0</span>;
-        <span class="c-type">int</span> tests = <span class="c-num">10000</span>;
+    <span class="c-type">int</span> free      = <span class="c-num">0</span>;
+    <span class="c-type">int</span> prisoners = <span class="c-num">100</span>;
+    <span class="c-type">int</span> tests     = <span class="c-num">10000</span>;
 
-        <span class="c-todo">// TODO: צרו עצם PrisonersProblem עם 100 אסירים</span>
-        <span class="c-type">PrisonersProblem</span> prisonersObj = <span class="c-todo">/* TODO: new PrisonersProblem(100) */</span>;
+    <span class="c-todo">// TODO: לולאה של 'tests' פעמים</span>
+    <span class="c-kw">for</span> ( <span class="c-todo">/* TODO */</span> ) {
 
-        <span class="c-todo">// TODO: לולאה של tests פעמים</span>
-        <span class="c-kw">for</span> ( <span class="c-todo">/* TODO */</span> ) {
-
-            <span class="c-todo">// TODO: קראו ל-prisonersObj.testSerialSearchByValueChain()</span>
-            <span class="c-todo">// TODO: אם מחזירה true — הגדילו את free ב-1</span>
-        }
-
-        <span class="c-type">System</span>.out.println(<span class="c-num">100.0</span> * free / tests + <span class="c-str">"% of trials result in free prisoners."</span>);
+        <span class="c-todo">// TODO: קראו ל-testSerialSearchByValueChain(prisoners)</span>
+        <span class="c-todo">// TODO: אם מחזירה true — הגדילו את free ב-1</span>
     }
+
+    <span class="c-todo">// TODO: הדפיסו free / tests כמספר עשרוני (המירו ל-double)</span>
+    <span class="c-type">System</span>.out.println( <span class="c-todo">/* TODO */</span> );
 }</pre>
+
       <ul class="hints">
-        <li>שימו לב: יוצרים עצם <strong>אחד בלבד</strong> מחוץ ללולאה — כל הרצה משתמשת באותו עצם ורק מערבבת מחדש את <code>boxes</code>.</li>
-        <li>פלט צפוי: <span style="direction:ltr;display:inline-block">≈ 31.18%</span> — יהיו שינויים קטנים בין הרצות בגלל האקראיות.</li>
+        <li>פלט צפוי: מספר קרוב ל-<code>0.3118</code> — יהיו שינויים קטנים בין הרצות בגלל האקראיות.</li>
+        <li>עם 10,000 ניסויים ו-100 אסירים התוצאה יציבה סטטיסטית (סטיית תקן ≈ 0.005).</li>
       </ul>
     </div>
   </div>
-
 </div>
 
 <!-- ══════════════════════════════════════════
@@ -536,70 +456,20 @@ label.lbl{display:block;font-size:.75rem;font-weight:700;color:var(--t2);margin-
   </div>
   <div id="tester">
     <div class="tester-hd">
-      <h3>בודק ויזואלי — JavaScript</h3>
-      <span class="badge2">ללא צורך ב-API</span>
+      <h3>בודק Java ויזואלי</h3>
+      <span class="badge2">AI-POWERED</span>
     </div>
     <div class="tester-body">
+      <p style="font-size:.88rem;color:var(--t1);margin-bottom:14px">הדביקו את הפונקציה <code>serialSearchByValueChain</code> שכתבתם (או את כל הקלאס). בינה מלאכותית תתרגם אותה ל-JavaScript ותריץ את הסימולציה עם האלגוריתם שלכם — כך תוכלו לראות בעיניים אם המימוש נכון.</p>
+      <label class="lbl">קוד Java שלכם</label>
+      <textarea id="jcode" placeholder="static int serialSearchByValueChain(int[] arr, int startIndex) {
+    // your implementation here...
+}
 
-      <!-- מדריך המרה -->
-      <details style="margin-bottom:14px">
-        <summary style="cursor:pointer;font-size:.82rem;font-weight:700;color:var(--cy);padding:6px 0;list-style:none;display:flex;align-items:center;gap:6px">
-          <span>📋</span> איך להמיר את קוד ה-Java ל-JavaScript? (לחצו לפתיחה)
-        </summary>
-        <div style="margin-top:10px;padding:14px;background:#f9f8f5;border:1px solid var(--bd);border-radius:6px;font-size:.84rem">
-          <p style="margin-bottom:10px">ההמרה <strong>מכנית לחלוטין</strong> — כמעט שורה-אחר-שורה:</p>
-          <table style="width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:.76rem">
-            <tr style="background:#1a1814;color:#cdd4e0">
-              <th style="padding:6px 10px;text-align:right;border:1px solid #2d2b26;font-weight:600">Java</th>
-              <th style="padding:6px 10px;text-align:right;border:1px solid #2d2b26;font-weight:600">JavaScript</th>
-            </tr>
-            <tr style="background:#f0ede6"><td style="padding:5px 10px;border:1px solid var(--bd)"><code>this.boxes[i]</code></td><td style="padding:5px 10px;border:1px solid var(--bd)"><code>arr[i]</code></td></tr>
-            <tr><td style="padding:5px 10px;border:1px solid var(--bd)"><code>this.boxes.length</code></td><td style="padding:5px 10px;border:1px solid var(--bd)"><code>arr.length</code></td></tr>
-            <tr style="background:#f0ede6"><td style="padding:5px 10px;border:1px solid var(--bd)"><code>boolean[] visited = new boolean[n]</code></td><td style="padding:5px 10px;border:1px solid var(--bd)"><code>let visitedFlags = new Array(arr.length).fill(false)</code></td></tr>
-            <tr><td style="padding:5px 10px;border:1px solid var(--bd)"><code>int x = 0;</code></td><td style="padding:5px 10px;border:1px solid var(--bd)"><code>let x = 0;</code></td></tr>
-            <tr style="background:#f0ede6"><td style="padding:5px 10px;border:1px solid var(--bd)"><code>return searchCount;</code> (הצלחה)</td><td style="padding:5px 10px;border:1px solid var(--bd)"><code>return { visited: chain, success: true };</code></td></tr>
-            <tr><td style="padding:5px 10px;border:1px solid var(--bd)"><code>return -1;</code> (כישלון)</td><td style="padding:5px 10px;border:1px solid var(--bd)"><code>return { visited: chain, success: false };</code></td></tr>
-          </table>
-          <p style="margin-top:10px;color:var(--t2);font-size:.8rem">שימו לב: <code>chain</code> הוא מערך שמכיל את כל האינדקסים שנפתחו בסדר, הוסיפו לו <code>chain.push(currentIndex)</code> בכל צעד.</p>
-        </div>
-      </details>
-
-      <label class="lbl">קוד JavaScript — מלאו את הלוגיקה שלכם</label>
-      <textarea id="jcode" spellcheck="false">function customSearch(arr, startIndex) {
-  // arr         = מערך הקופסאות  (במקום this.boxes)
-  // startIndex  = מספר האסיר
-  // החזירו: { visited: [אינדקסים שנפתחו לפי הסדר], success: true/false }
-
-  const half = Math.floor(arr.length / 2);      // במקום this.prisonersNumber / 2
-  const visitedFlags = new Array(arr.length).fill(false);
-  const chain = [];                              // חדש: תיעוד לויזואליזציה
-
-  let currentIndex = startIndex;
-  let currentValue = arr[currentIndex];          // במקום this.boxes[currentIndex]
-  let searchCount = 0;
-
-  while (currentValue !== startIndex && searchCount <= half) {
-
-    if (currentIndex < 0 || currentIndex >= arr.length)
-      return { visited: chain, success: false }; // במקום: return -1
-
-    if (visitedFlags[currentIndex])
-      return { visited: chain, success: false }; // במקום: return -1
-
-    chain.push(currentIndex);                    // חדש: תיעוד כל קופסה
-    visitedFlags[currentIndex] = true;
-    currentValue = arr[currentIndex];            // במקום this.boxes[currentIndex]
-    currentIndex = currentValue;
-    searchCount++;
-  }
-
-  chain.push(currentIndex);                      // חדש: הקופסה האחרונה
-  const success = (currentValue === startIndex) && (searchCount <= half);
-  return { visited: chain, success };            // במקום: return searchCount
-}</textarea>
-      <div id="jst" style="min-height:20px;font-size:.8rem;font-family:'JetBrains Mono',monospace;margin:10px 0;color:var(--t2)"></div>
+// ניתן להדביק את כל הקלאס — רק serialSearchByValueChain תשמש."></textarea>
+      <div id="jst"></div>
       <div class="tester-btns">
-        <button class="tbtn pri" id="japply" onclick="applyJS()">▶ הרץ סימולציה</button>
+        <button class="tbtn pri" id="japply" onclick="applyJava()">⚡ תרגם והרץ</button>
         <button class="tbtn sec" onclick="resetDef()">↺ אפס לברירת מחדל</button>
         <span id="jmode" style="font-size:.75rem;font-family:'JetBrains Mono',monospace;color:var(--t2)">פועל עם: אלגוריתם ברירת מחדל</span>
       </div>
@@ -746,7 +616,7 @@ body{background:var(--bg);color:var(--t0);font-family:'Syne',sans-serif;display:
 .bx{border-radius:3px;background:var(--s1);border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;aspect-ratio:1;transition:all .07s;position:relative}
 .bnum{font-size:.28rem;font-family:'JetBrains Mono',monospace;color:var(--bd);line-height:1}
 .bval{font-size:.6rem;font-weight:600;font-family:'JetBrains Mono',monospace;line-height:1.1}
-#pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(14px,1fr));gap:2px;flex-shrink:0;padding:2px 0}
+#pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(14px,1fr));gap:2px;flex-shrink:0}
 .pc{aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.02);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:.26rem;font-family:'JetBrains Mono',monospace;color:var(--bd);transition:all .1s}
 .pc.act{background:rgba(0,229,255,.14);border-color:var(--cy);color:var(--cy);box-shadow:0 0 4px rgba(0,229,255,.4)}
 .pc.suc{background:rgba(0,255,136,.1);border-color:rgba(0,255,136,.5);color:var(--gn)}
@@ -754,7 +624,7 @@ body{background:var(--bg);color:var(--t0);font-family:'Syne',sans-serif;display:
 #rp{background:var(--bd);display:flex;flex-direction:column;gap:1px;overflow:hidden}
 .rpnl{background:var(--s1);padding:8px 10px}
 .rpnl.grow{flex:1;min-height:0;display:flex;flex-direction:column}
-#info{font-size:.54rem;font-family:'JetBrains Mono',monospace;line-height:1.9;color:var(--t0);min-height:60px}
+#info{font-size:.54rem;font-family:'JetBrains Mono',monospace;line-height:1.9;color:var(--t0);min-height:70px}
 #info .cy{color:var(--cy)}#info .gn{color:var(--gn)}#info .rd{color:var(--rd)}#info .gl{color:var(--gl)}#info .dm{color:var(--bd)}
 canvas{flex:1;display:block;width:100%;min-height:0}
 #ct{background:var(--s1);border-top:1px solid var(--bd);padding:5px 12px;display:flex;align-items:center;gap:7px;flex-shrink:0;flex-wrap:wrap}
@@ -785,10 +655,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:9px;height
   <div id="lp">
     <div class="ptl" id="btl">BOXES</div>
     <div id="bgrid"></div>
+    <div class="ptl">PRISONERS</div>
+    <div id="pgrid"></div>
   </div>
   <div id="rp">
     <div class="rpnl" style="flex-shrink:0"><div class="ptl">STATE</div><div id="info"><span class="dm">Press ▶ PLAY</span></div></div>
-    <div class="rpnl" style="flex-shrink:0"><div class="ptl">PRISONERS</div><div id="pgrid"></div></div>
     <div class="rpnl grow"><div class="ptl">SUCCESS RATE vs THEORY 31.18%</div><canvas id="cv"></canvas></div>
   </div>
 </div>
@@ -985,56 +856,57 @@ function loadSim(){
 // Auto-load on page ready so §2 works without a click
 window.addEventListener('load', loadSim);
 
-// ── JS TESTER (no API) ───────────────────────────────
+// ── JAVA TESTER ──────────────────────────────────────
 function resetDef(){
   document.getElementById('jst').textContent='';
   document.getElementById('jmode').textContent='פועל עם: אלגוריתם ברירת מחדל';
   document.getElementById('jmode').style.color='';
   const f=document.getElementById('sim2frame');
-  if(f.srcdoc) f.contentWindow?.setCustomFn?.(null);
+  if(f.srcdoc)f.contentWindow?.setCustomFn?.(null);
 }
 
-function applyJS(){
+async function applyJava(){
   const code=document.getElementById('jcode').value.trim();
-  if(!code){
-    document.getElementById('jst').innerHTML='<span style="color:#cc2244">✗ הכניסו קוד JavaScript תחילה</span>';
-    return;
-  }
+  if(!code){document.getElementById('jst').innerHTML='<span style="color:#cc2244">✗ הדביקו קוד Java תחילה</span>';return;}
+  const btn=document.getElementById('japply');
+  btn.disabled=true;
+  document.getElementById('jst').innerHTML='<span style="color:#b06000">⏳ מתרגם Java ל-JavaScript…</span>';
   try{
-    // Wrap in IIFE and extract the function
-    const fn = new Function('return (' + code + ')')();
-    if(typeof fn !== 'function')
-      throw new Error('הקוד צריך להכיל פונקציה בשם customSearch');
-
-    // Validate on [0,1,2,3]: prisoner 0 → arr[0]=0 = startIndex immediately → 1 step, success=true
-    const test = fn([0,1,2,3], 0);
-    if(!Array.isArray(test?.visited))
-      throw new Error('הפונקציה צריכה להחזיר { visited: [...], success: bool }');
-    if(typeof test?.success !== 'boolean')
-      throw new Error('שדה success חסר או אינו boolean');
-    if(test.visited.length === 0)
-      throw new Error('visited ריק — הוסיפו chain.push(currentIndex) בכל צעד');
-    if(!test.success)
-      throw new Error('הפונקציה החזירה success:false — בדקו שהלולאה מסתיימת כשמוצאים את startIndex');
-
-    document.getElementById('jst').innerHTML='<span style="color:#00875a">✓ הקוד תקין! מריץ סימולציה…</span>';
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',max_tokens:1200,
+      messages:[{role:'user',content:
+`Convert this Java prisoner search function to JavaScript.
+REQUIREMENTS:
+- Function signature MUST be exactly: function customSearch(arr, startIndex)
+- arr: JavaScript array of integers (0 to arr.length-1)
+- startIndex: integer 0..arr.length-1
+- Returns {visited: [array of box indices in order], success: boolean}
+- success = true if prisoner found their number within floor(arr.length/2) steps
+- Stop at floor(arr.length/2) steps max
+- Use boolean array guard against infinite loops
+Return ONLY this JSON (no markdown):
+{"fn":"function customSearch(arr,startIndex){ ... }"}
+Java:
+${code}`}]})});
+    const data=await resp.json();
+    const txt=data.content.find(b=>b.type==='text')?.text||'';
+    let fnStr;
+    try{const clean=txt.replace(/```[\w]*\n?|```\n?/g,'').trim();fnStr=JSON.parse(clean).fn;}
+    catch{const m=txt.match(/function\s+customSearch[\s\S]+?\n\s*\}/);if(m)fnStr=m[0];else throw new Error('לא ניתן לפרסר את התגובה');}
+    const fn=new Function('return ('+fnStr+')')();
+    const test=fn([1,2,0],0);
+    if(!Array.isArray(test?.visited)||typeof test?.success!=='boolean')throw new Error('הפונקציה החזירה פורמט שגוי');
+    document.getElementById('jst').innerHTML='<span style="color:#00875a">✓ הקוד תורגם בהצלחה! מריץ סימולציה עם האלגוריתם שלכם…</span>';
     document.getElementById('jmode').textContent='פועל עם: האלגוריתם שלכם ✓';
     document.getElementById('jmode').style.color='#00875a';
-
-    const div=document.getElementById('sim2div'), frame=document.getElementById('sim2frame');
+    const div=document.getElementById('sim2div'),frame=document.getElementById('sim2frame');
     div.classList.add('show');
-    if(!frame.srcdoc){
-      frame.srcdoc=getSimHTML();
-      frame.addEventListener('load',()=>{ setTimeout(()=>frame.contentWindow?.setCustomFn?.(fn),200); },{once:true});
-    } else {
-      frame.contentWindow?.setCustomFn?.(fn);
-    }
+    if(!frame.srcdoc){frame.srcdoc=getSimHTML();frame.addEventListener('load',()=>{setTimeout(()=>frame.contentWindow?.setCustomFn?.(fn),200);},{once:true});}
+    else frame.contentWindow?.setCustomFn?.(fn);
     div.scrollIntoView({behavior:'smooth',block:'nearest'});
-
   }catch(err){
-    document.getElementById('jst').innerHTML=`<span style="color:#cc2244">✗ שגיאה: ${err.message}</span>`;
-    console.error(err);
-  }
+    document.getElementById('jst').innerHTML=`<span style="color:#cc2244">✗ ${err.message}</span>`;
+  }finally{btn.disabled=false;}
 }
 
 // ── PROGRESS BAR ─────────────────────────────────────

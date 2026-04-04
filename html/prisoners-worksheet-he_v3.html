@@ -1006,8 +1006,8 @@ function applyJS(){
     if(typeof fn !== 'function')
       throw new Error('הקוד צריך להכיל פונקציה בשם customSearch');
 
-    // Validate on [0,1,2,3]: prisoner 0 → arr[0]=0 = startIndex immediately → 1 step, success=true
-    const test = fn([0,1,2,3], 0);
+    // Validate on a known permutation: [1,2,0], prisoner 0 → chain 0→1→2→0, success in 3 steps
+    const test = fn([1,2,0], 0);
     if(!Array.isArray(test?.visited))
       throw new Error('הפונקציה צריכה להחזיר { visited: [...], success: bool }');
     if(typeof test?.success !== 'boolean')
@@ -1015,7 +1015,7 @@ function applyJS(){
     if(test.visited.length === 0)
       throw new Error('visited ריק — הוסיפו chain.push(currentIndex) בכל צעד');
     if(!test.success)
-      throw new Error('הפונקציה החזירה success:false — בדקו שהלולאה מסתיימת כשמוצאים את startIndex');
+      throw new Error('הפונקציה החזירה success:false על מחזור ידוע — בדקו את הלוגיקה');
 
     document.getElementById('jst').innerHTML='<span style="color:#00875a">✓ הקוד תקין! מריץ סימולציה…</span>';
     document.getElementById('jmode').textContent='פועל עם: האלגוריתם שלכם ✓';
